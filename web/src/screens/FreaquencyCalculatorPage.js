@@ -17,13 +17,8 @@ const FreaquencyCalculatorPage = props => {
   }
 
   const handleCalculateFrequency = () => {
-    api.calculateFrequeny(url).then(data => {
-      if(data.message == 'OK'){
-        setRows(data.wordArray);
-      }
-      console.log(data.message);
-      
-      
+    api.calculateFrequeny(url).then(data => { 
+      console.log(data);     
     })
   }
 
