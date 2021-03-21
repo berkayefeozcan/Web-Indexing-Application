@@ -14,22 +14,24 @@ def index():
                    id=[1,2,3,4,5,6,7,8,9])
 
 @app.route('/calculateFrequeny', methods=['GET'])
+
 def CalculateFreq():
     givenUrl = request.args.get('givenUrl') 
-    result = CalculateFrequency(givenUrl)
-    print(result)
-    res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
-    print(res)
-    return res
+    try:
+      result = CalculateFrequency(givenUrl)
+      res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
+    except :
+      res = make_response(jsonify({"message": "eroor"}), 404)  
 
 @app.route('/findKeywords', methods=['GET'])
 def FindKeyw():
     givenUrl = request.args.get('givenUrl') 
-    result = FindKeywords(givenUrl)
-    print(result)
-    res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
-    print(res)
-    return res
+    try:
+      result = FindKeywords(givenUrl)
+      res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
+    except :
+      res = make_response(jsonify({"message": "eroor"}), 404)    
+
 
 if __name__ == "__main__":
     app.run(debug=True)

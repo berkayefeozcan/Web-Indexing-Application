@@ -7,12 +7,13 @@ def GetWordsFromUrl(url):
    my_wordlist = []
    my_source_code = requests.get(url).text
    my_soup = BeautifulSoup(my_source_code, 'html.parser')
+
    content = my_soup.get_text()
    words = content.lower().split()
 
    for each_word in words:
-      my_wordlist.append(each_word)     
-
+      my_wordlist.append(each_word)
+      
    return clean_wordlist(my_wordlist)
 
 
@@ -56,6 +57,4 @@ def CreateDictionary(clean_list, isKeyword):
    else:
       top = c.most_common(len(word_count))
       return top
-
-
 
