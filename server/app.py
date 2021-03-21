@@ -1,8 +1,12 @@
 from flask import Flask
 from flask import request, jsonify, make_response
 from flask_cors import CORS
+from scrape import my_start
+
 app = Flask(__name__)
 CORS(app)
+
+
 @app.route('/')
 def index():
     return jsonify(username="ali",
@@ -12,8 +16,11 @@ def index():
 @app.route('/calculateFrequeny', methods=['GET'])
 def a():
     givenUrl = request.args.get('givenUrl')
+    
+    result = my_start(givenUrl)
     wordArray= [{"name":"deneme","repeatAmount":10}]
-    res = make_response(jsonify({"message": "OK" , "wordArray":wordArray}), 200)
+    res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
+    print(res)
     return res
 
 if __name__ == "__main__":
