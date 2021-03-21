@@ -5,19 +5,22 @@ import {
   List,
   ListItem,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Paper
+  Paper,CircularProgress
 } from '@material-ui/core';
 import styles from '../styles';
 import api from '../functions/api';
 const FreaquencyCalculatorPage = props => {
   const [url, setUrl] = useState('');
   const [rows, setRows] = useState([]);
+  const [spinnerIsVisible,setSpinnerIsVisible] = useState(false);
   const handleUrlChange = (event) => {
     setUrl(event.target.value);
   }
 
   const handleCalculateFrequency = () => {
+    setSpinnerIsVisible(true);
     api.calculateFrequeny(url).then(data => { 
+      setSpinnerIsVisible(false);
       console.log(data);     
       if(data.message ==='OK'){
 
@@ -49,6 +52,7 @@ const FreaquencyCalculatorPage = props => {
                 </TableRow>
               </TableHead>
               <TableBody>
+                { spinnerIsVisible && <CircularProgress style={{display:'flex',justifySelf:'center', alignSelf:'center'}}/>}
                 {rows.map((row) => (
                   <TableRow key={row[0]}>
                     <TableCell component="th" scope="row">
