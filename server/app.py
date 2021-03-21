@@ -16,10 +16,11 @@ def index():
 @app.route('/calculateFrequeny', methods=['GET'])
 def a():
     givenUrl = request.args.get('givenUrl')
-    
-    result = my_start(givenUrl)
-    wordArray= [{"name":"deneme","repeatAmount":10}]
-    res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
+    try:
+        result = my_start(givenUrl)
+        res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
+    except :
+        res = make_response(jsonify({"message": "eroor"}), 404)     
     print(res)
     return res
 
