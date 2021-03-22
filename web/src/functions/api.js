@@ -12,4 +12,18 @@ export default {
 
         }
     },
+
+    async calculateSimilarity(givenUrlOne, givenUrlTwo)
+    {
+        try {
+            const fetchResult = fetch(`${metrics.URL}/CalculateSimilarity?givenUrlOne=${givenUrlOne}&givenUrlTwo=${givenUrlTwo}`, {
+                method: 'GET'
+            })
+            const response = await fetchResult;            
+            return response.json();
+        } catch (e) {
+            console.warn(e);
+
+        }
+    }
 }
