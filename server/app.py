@@ -17,11 +17,12 @@ def index():
 def CalculateFreq():
     givenUrl = request.args.get('givenUrl') 
     try:
-      result = CalculateSimilarity("https://www.fanatik.com.tr/besiktas-kacan-galibiyete-uzuluyor-2209053", "https://www.hurriyet.com.tr/video/tolga-kuru-beraberlik-fenerbahce-icin-firsat-kaybi-41768881")
+      result = CalculateFrequency(givenUrl)
       res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
     except :
       res = make_response(jsonify({"message": "eroor"}), 404)
     return res
+
 
 @app.route('/findKeywords', methods=['GET'])
 def FindKeyw():
@@ -32,6 +33,7 @@ def FindKeyw():
     except :
       res = make_response(jsonify({"message": "eroor"}), 404)   
     return res
+
 
 @app.route('/CalculateSimilarity', methods=['GET'])
 def CalculateSim():

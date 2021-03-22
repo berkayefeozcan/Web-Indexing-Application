@@ -1,4 +1,4 @@
-import requests
+import requests 
 from bs4 import BeautifulSoup
 import operator
 from collections import Counter
@@ -7,12 +7,13 @@ def GetWordsFromUrl(url):
    my_wordlist = []
    my_source_code = requests.get(url).text
    my_soup = BeautifulSoup(my_source_code, 'html.parser')
+
    content = my_soup.get_text()
    words = content.lower().split()
 
    for each_word in words:
-      my_wordlist.append(each_word)     
-
+      my_wordlist.append(each_word)
+      
    return clean_wordlist(my_wordlist)
 
 
@@ -58,8 +59,6 @@ def CreateDictionary(clean_list, isKeyword):
       return top
 
 
-
-
 #calculation similarity
 def CalculateSimilarity(givenUrl1, givenUrl2):
    url1Keywords = FindKeywords(givenUrl1)
@@ -83,7 +82,4 @@ def FindSimilarityScore(listOfKeyword, listOfPerWord):
    
 
    
-
-
-
 
