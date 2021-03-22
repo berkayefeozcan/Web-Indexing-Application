@@ -77,6 +77,27 @@ def FindSimilarityScore(listOfKeyword, listOfPerWord):
             word_count[word[0]] = word[1]
             score *= word[1]
    return score/len(listOfPerWord)
+
+def getLinksFromAWebSite(url):
+   links = []
+   my_source_code = requests.get(url).text
+   soup = BeautifulSoup(my_source_code, 'html.parser')
+  
+   for aTag in soup.find_all('a', href=True):
+      link = aTag['href']
+      if link.startswith("http") :
+         links.append(link)
+   print(links)
+   return links
+
+def indexWebASite(url,urlSet):
+   keywords = FindKeywords(url)
+   ''' alinan anahtar kelimesiyle benzerlik orani hesaplanip
+       bir siralama yapilacak.
+    '''
+
+#getLinksFromAWebSite("http://bilgisayar.kocaeli.edu.tr/duyurular.php")
+       
    
 
    
