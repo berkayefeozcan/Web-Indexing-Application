@@ -19,12 +19,12 @@ def CalculateFreq():
     givenUrl = request.args.get('givenUrl') 
     try:
       result = CalculateFrequency(givenUrl)
-      print(result)
       res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
     except :
       res = make_response(jsonify({"message": "eroor"}), 404)
     
     return res;
+
 
 @app.route('/findKeywords', methods=['GET'])
 def FindKeyw():
@@ -33,9 +33,9 @@ def FindKeyw():
       result = FindKeywords(givenUrl)
       res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
     except :
-      res = make_response(jsonify({"message": "eroor"}), 404)   
+      res = make_response(jsonify({"message": "eroor"}), 404)
+    return res    
 
-    return res
 
 @app.route('/CalculateSimilarity', methods=['GET'])
 def CalculateSim():

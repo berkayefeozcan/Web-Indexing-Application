@@ -24,10 +24,18 @@ const FreaquencyCalculatorPage = (props) => {
   };
 
   const handleCalculateFrequency = () => {
-    api.calculateFrequeny(url).then((data) => {
-      console.log(data);
-    });
-  };
+
+    api.calculateFrequeny(url).then(data => { 
+      console.log(data);     
+      if(data.message ==='OK'){
+
+        setRows(data.wordArray);
+      }else{
+        setRows([]);
+        alert("yanlis bir url girdiniz ya da bir sorunla karsilasildi")
+      }
+    })
+  }
 
   return (
     <>
@@ -49,8 +57,10 @@ const FreaquencyCalculatorPage = (props) => {
           </Button>
         </ListItem>
         <ListItem>
+
           <TableContainer TableContainercomponent={Paper} style={styles.wrapper}>
             <Table aria-label="simple table">
+
               <TableHead>
                 <TableRow>
                   <TableCell>Kelime</TableCell>
@@ -59,11 +69,11 @@ const FreaquencyCalculatorPage = (props) => {
               </TableHead>
               <TableBody>
                 {rows.map((row) => (
-                  <TableRow key={row.name}>
+                  <TableRow key={row[0]}>
                     <TableCell component="th" scope="row">
-                      {row.name}
+                      {row[0]}
                     </TableCell>
-                    <TableCell align="right">{row.repeatAmount}</TableCell>
+                    <TableCell align="right">{row[1]}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -73,6 +83,13 @@ const FreaquencyCalculatorPage = (props) => {
       </List>
     </>
   );
+
+}
+const stylesIn ={
+  table:{
+    height:window.innerHeight*0.7
+  }
+
 };
 
 export default FreaquencyCalculatorPage;
