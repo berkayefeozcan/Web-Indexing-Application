@@ -4,36 +4,52 @@ import {
   Button,
   List,
   ListItem,
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Paper
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from '@material-ui/core';
 import styles from '../styles';
 import api from '../functions/api';
-const FreaquencyCalculatorPage = props => {
+
+const FreaquencyCalculatorPage = (props) => {
   const [url, setUrl] = useState('');
   const [rows, setRows] = useState([]);
+
   const handleUrlChange = (event) => {
     setUrl(event.target.value);
-  }
+  };
 
   const handleCalculateFrequency = () => {
-    api.calculateFrequeny(url).then(data => { 
-      console.log(data);     
-    })
-  }
+    api.calculateFrequeny(url).then((data) => {
+      console.log(data);
+    });
+  };
 
   return (
     <>
-      <List >
-
+      <List>
         <ListItem style={styles.wrapper}>
-          <TextField style={{ width: '50%' }} id="standard-name" label="Bir url giriniz" value={url} onChange={handleUrlChange} />
-          <Button variant="contained" onClick={handleCalculateFrequency} color="primary">
+          <TextField
+            style={{ width: '50%' }}
+            id="standard-name"
+            label="Bir url giriniz"
+            value={url}
+            onChange={handleUrlChange}
+          />
+          <Button
+            variant="contained"
+            onClick={handleCalculateFrequency}
+            color="primary"
+          >
             Frekans Hesapla
           </Button>
         </ListItem>
         <ListItem>
-          <TableContainer component={Paper} style={styles.wrapper}>
+          <TableContainer TableContainercomponent={Paper} style={styles.wrapper}>
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -53,11 +69,10 @@ const FreaquencyCalculatorPage = props => {
               </TableBody>
             </Table>
           </TableContainer>
-
         </ListItem>
       </List>
     </>
   );
-}
+};
 
 export default FreaquencyCalculatorPage;

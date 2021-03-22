@@ -47,7 +47,7 @@ def CreateDictionary(clean_list, isKeyword):
          word_count[word] += 1
       else:
          word_count[word] = 1
-  
+   
    # returns the most occurring elements
    c = Counter(word_count)
    if isKeyword:
@@ -56,6 +56,27 @@ def CreateDictionary(clean_list, isKeyword):
    else:
       top = c.most_common(len(word_count))
       return top
+
+
+
+
+#calculation similarity
+def CalculateSimilarity(givenUrl1, givenUrl2):
+   url1Keywords = FindKeywords(givenUrl1)
+   url2Freq = CalculateFrequency(givenUrl2)
+
+   FindSimilarityScore(url1Keywords, url2Freq)
+
+def FindSimilarityScore(listOfKeyword, listOfPerWord):
+   word_count = {}   
+
+   for keyWord in listOfKeyword:
+      for word in listOfPerWord:
+         if keyWord[0] == word[0]:
+            word_count[word[0]] = word[1]
+
+   
+
 
 
 
