@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request, jsonify, make_response
 from flask_cors import CORS
-from scrape import CalculateFrequency, FindKeywords
+from scrape import CalculateFrequency, FindKeywords, CalculateSimilarity
 
 app = Flask(__name__)
 CORS(app)
@@ -21,8 +21,10 @@ def CalculateFreq():
       result = CalculateFrequency(givenUrl)
       res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
     except :
-      res = make_response(jsonify({"message": "eroor"}), 404)  
-    return res
+      res = make_response(jsonify({"message": "eroor"}), 404)
+    
+    return res;
+
 
 @app.route('/findKeywords', methods=['GET'])
 def FindKeyw():
@@ -33,6 +35,22 @@ def FindKeyw():
     except :
       res = make_response(jsonify({"message": "eroor"}), 404)
     return res    
+
+
+@app.route('/CalculateSimilarity', methods=['GET'])
+def CalculateSim():
+    givenUrl1 = request.args.get('givenUrl1')
+    givenUrl2 = request.args.get('givenUrl2') 
+    
+    try:
+        print("url1 :"+givenUrl1)
+        print("url2 :"+givenUrl2)
+        CalculateSimilarity(givenUrl1, givenUrl2)
+        res = make_response(jsonify({"message": "OK" , "wordArray":"result"}), 200)
+    except:
+        res = make_response(jsonify({"message":"error"}), 404)
+
+    return res
 
 
 if __name__ == "__main__":
