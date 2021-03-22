@@ -13,19 +13,17 @@ export default {
         }
     },
 
-    async calculateSimilarity(givenUrl1, givenUrl2)
+    async calculateSimilarity(givenUrlOne, givenUrlTwo)
     {
-        try 
-        {
-            const fetchResult = fetch(`${metrics.URL}/calculateSimilarity?givenUrl1=${givenUrl1}&givenUrl2=${givenUrl2}`, {
+        try {
+            const fetchResult = fetch(`${metrics.URL}/CalculateSimilarity?givenUrlOne=${givenUrlOne}&givenUrlTwo=${givenUrlTwo}`, {
                 method: 'GET'
             })
             const response = await fetchResult;            
             return response.json();
-        } 
-        catch (error) 
-        {
-            console.warn(error);
+        } catch (e) {
+            console.warn(e);
+
         }
     }
 }

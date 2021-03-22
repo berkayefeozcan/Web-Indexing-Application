@@ -62,17 +62,24 @@ def CreateDictionary(clean_list, isKeyword):
 #calculation similarity
 def CalculateSimilarity(givenUrl1, givenUrl2):
    url1Keywords = FindKeywords(givenUrl1)
+   url2Keywords = FindKeywords(givenUrl2)
    url2Freq = CalculateFrequency(givenUrl2)
+   similarityScore = FindSimilarityScore(url1Keywords, url2Freq)
 
-   FindSimilarityScore(url1Keywords, url2Freq)
+   print({"url1Keywords": url1Keywords, "url2Keywords": url2Keywords, "similarityScore": similarityScore})
+   return {"url1Keywords": url1Keywords, "url2Keywords": url2Keywords, "similarityScore": similarityScore}
+
 
 def FindSimilarityScore(listOfKeyword, listOfPerWord):
    word_count = {}   
-
+   score = 1
    for keyWord in listOfKeyword:
       for word in listOfPerWord:
          if keyWord[0] == word[0]:
             word_count[word[0]] = word[1]
+            score *= word[1]
+   return score/len(listOfPerWord)
+   
 
    
 

@@ -14,7 +14,6 @@ def index():
                    id=[1,2,3,4,5,6,7,8,9])
 
 @app.route('/calculateFrequeny', methods=['GET'])
-
 def CalculateFreq():
     givenUrl = request.args.get('givenUrl') 
     try:
@@ -22,8 +21,7 @@ def CalculateFreq():
       res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
     except :
       res = make_response(jsonify({"message": "eroor"}), 404)
-    
-    return res;
+    return res
 
 
 @app.route('/findKeywords', methods=['GET'])
@@ -33,23 +31,19 @@ def FindKeyw():
       result = FindKeywords(givenUrl)
       res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
     except :
-      res = make_response(jsonify({"message": "eroor"}), 404)
-    return res    
+      res = make_response(jsonify({"message": "eroor"}), 404)   
+    return res
 
 
 @app.route('/CalculateSimilarity', methods=['GET'])
 def CalculateSim():
-    givenUrl1 = request.args.get('givenUrl1')
-    givenUrl2 = request.args.get('givenUrl2') 
-    
+    givenUrlOne = request.args.get('givenUrlOne')
+    givenUrlTwo = request.args.get('givenUrlTwo') 
     try:
-        print("url1 :"+givenUrl1)
-        print("url2 :"+givenUrl2)
-        CalculateSimilarity(givenUrl1, givenUrl2)
-        res = make_response(jsonify({"message": "OK" , "wordArray":"result"}), 200)
+        result = CalculateSimilarity(givenUrlOne, givenUrlTwo)
+        res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
     except:
         res = make_response(jsonify({"message":"error"}), 404)
-
     return res
 
 
