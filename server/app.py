@@ -9,9 +9,7 @@ CORS(app)
 
 @app.route('/')
 def index():
-    return jsonify(username="ali",
-                   email="deneme@gmail.com",
-                   id=[1,2,3,4,5,6,7,8,9])
+    return jsonify("This is Home page")
 
 @app.route('/calculateFrequeny', methods=['GET'])
 def CalculateFreq():
