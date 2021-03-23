@@ -9,15 +9,13 @@ CORS(app)
 
 @app.route('/')
 def index():
-    return jsonify(username="ali",
-                   email="deneme@gmail.com",
-                   id=[1,2,3,4,5,6,7,8,9])
+    return jsonify("This is Home page")
 
 @app.route('/calculateFrequeny', methods=['GET'])
 def CalculateFreq():
     givenUrl = request.args.get('givenUrl') 
     try:
-      result = CalculateSimilarity("https://www.fanatik.com.tr/besiktas-kacan-galibiyete-uzuluyor-2209053", "https://www.hurriyet.com.tr/video/tolga-kuru-beraberlik-fenerbahce-icin-firsat-kaybi-41768881")
+      result = CalculateFrequency(givenUrl)
       res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
     except :
       res = make_response(jsonify({"message": "eroor"}), 404)
