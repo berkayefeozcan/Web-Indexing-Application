@@ -2,7 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import operator
 from collections import Counter
-
+from anytree import AnyNode
+from anytree.exporter import JsonExporter
 def GetWordsFromUrl(url):
    my_wordlist = []
    my_source_code = requests.get(url).text
@@ -25,7 +26,6 @@ def CalculateFrequency(url):
 def FindKeywords(url): 
    wordList = GetWordsFromUrl(url)
    return CreateDictionary(wordList, True)
-
    
 
 
@@ -65,18 +65,22 @@ def CalculateSimilarity(givenUrl1, givenUrl2):
    url2Keywords = FindKeywords(givenUrl2)
    url2Freq = CalculateFrequency(givenUrl2)
    similarityScore = FindSimilarityScore(url1Keywords, url2Freq)
+   print(similarityScore)
    return {"url1Keywords": url1Keywords, "url2Keywords": url2Keywords, "similarityScore": similarityScore}
 
 
 def FindSimilarityScore(listOfKeyword, listOfPerWord):
-   word_count = {}   
+   resultDic ={}
+   resultDic['wordCounts'] = {}
    score = 1
    for keyWord in listOfKeyword:
       for word in listOfPerWord:
          if keyWord[0] == word[0]:
-            word_count[word[0]] = word[1]
-            score *= word[1]
-   return score/len(listOfPerWord)
+            resultDic['wordCounts'][word[0]] = word[1]
+            score += word[1]
+   # kendimce optimize ettim
+   resultDic['score'] = 1
+   return resultDic
 
 def getLinksFromAWebSite(url):
    links = []
@@ -87,17 +91,46 @@ def getLinksFromAWebSite(url):
       link = aTag['href']
       if link.startswith("http") :
          links.append(link)
-   print(links)
    return links
 
 def indexWebASite(url,urlSet):
+   print("indexleme basladi")
    keywords = FindKeywords(url)
+   exporter = JsonExporter(indent=10, sort_keys=True) 
    ''' alinan anahtar kelimesiyle benzerlik orani hesaplanip
        bir siralama yapilacak.
     '''
+   resultArr =[]
+   for i in urlSet : 
+      kwf=  FindSimilarityFreqWithKeys(keywords,i)['wordCounts']
+      root = AnyNode(urlName=url,kwf=kwf)
+      result = createKeywordFrequancyTree(root,root,3,0,keywords,i)
+      print(exporter.export(result))
+      resultArr.append(result)
+      return exporter._export(result)
+
+def FindSimilarityFreqWithKeys(keywordArr, url):
+        
+   freq = CalculateFrequency(url)
+   return FindSimilarityScore(keywordArr,freq)
+   
+   # return exporter._export(root)
+  
+       
+def createKeywordFrequancyTree(root,parent,stoperIndex,deep,keywords,iterationUrl):
+   # bu fonkisyon verilen url in alt urllerine bakarak skor hesaplar
+   if stoperIndex == deep:
+      return root
+   urlList = getLinksFromAWebSite(iterationUrl)[0:4]
+   for url in urlList:
+      kwf = FindSimilarityFreqWithKeys(keywords,url)['wordCounts']
+      newParent = AnyNode(urlName=url,kwf=kwf,parent=parent)
+      newDeep = deep+1
+      createKeywordFrequancyTree(root,newParent,stoperIndex,newDeep,keywords,url)
+   return root
 
 #getLinksFromAWebSite("http://bilgisayar.kocaeli.edu.tr/duyurular.php")
-       
+# indexWebASite("https://www.w3schools.com/python/ref_func_round.asp",["https://www.journaldev.com/33185/python-add-to-array"])     
    
 
    
