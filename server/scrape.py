@@ -6,7 +6,7 @@ from anytree import AnyNode
 from anytree.exporter import JsonExporter
 import time
 import concurrent.futures
-import threading
+from threading import Thread
 
 # gloabal variables
 # urlAmount = 23
@@ -103,9 +103,10 @@ def countWords(wordList,word_count={}, ratio=1):
    clean_list = clean_wordlist(wordList)
    for word in clean_list:
       if word in word_count:
-         word_count[word] += ratio
+         word_count[word][0] += ratio
+         word_count[word][1] += 1
       else:
-         word_count[word] = ratio
+         word_count[word] = [ratio,1]
 
    return word_count
 
@@ -128,8 +129,9 @@ def FindSimilarity(keywords1, keywords2):
     for keyWord in keywords1:
         for word in keywords2:
             if keyWord[0] == word[0]:
-                resultDic['wordCounts'][word[0]] = word[1]
-                score += word[1]
+                resultDic['wordCounts'][word[0]] = word[1][1]
+                print(word)
+                score += word[1][1]
     # kendimce optimize ettim
     resultDic['score'] = 1
     return resultDic
@@ -142,44 +144,51 @@ def getLinksFromAWebSite(url):
 
     for aTag in soup.find_all('a', href=True):
         link = aTag['href']
-        if link.startswith("http"):
+        if link.startswith("http") and link not in links:
             links.append(link)
     return links
 
 
+
+resultArr = []
 def indexWebASite(url, urlSet,depth, urlAmount):
     print("indexleme basladi")
     keywords = FindKeywords(url,5)
-    exporter = JsonExporter(indent=10, sort_keys=True)
+    
     ''' alinan anahtar kelimesiyle benzerlik orani hesaplanip
        bir siralama yapilacak.
     '''
-    resultArr = []
    #  with concurrent.futures.ThreadPoolExecutor() as executor:
    #    results = executor.map(threading, urlSet)
-
+    threads=[]
     for i in range(len(urlSet)):
-      t = threading.Thread()
+      t =Thread(target=threading, args=(urlSet[i],depth,urlAmount,keywords))
       t.start()
       threads.append(t)
+
+    for  thread in threads:
+        thread.join()
+    
+    for r in resultArr :
+        f = open("demofile2.txt", "a")
+        f.write(f"{r}")
+        f.close()
        
-    for res in results:
-      print(res)
+    # for res in results:
+    #   print(res)
       #   print(exporter.export(result))
       #   resultArr.append(result)
    
    #  return exporter._export(result)
 
 def threading(url, depht, urlAmount, keywords):
+   exporter = JsonExporter(indent=10, sort_keys=True)
    keywords2= FindKeywords(url,10)
    kwf = FindSimilarity(keywords, keywords2)['wordCounts']
    root = AnyNode(urlName=url, kwf=kwf)
-   result = createKeywordFrequancyTree(root, root, depth, 0, keywords, i,urlAmount)
-   return result
+   result = createKeywordFrequancyTree(root, root, depht, 0, keywords, url,urlAmount)
+   resultArr.append(exporter.export(result))
 
- 
-
-    # return exporter._export(root)
 
 
 def createKeywordFrequancyTree(root, parent, stoperIndex, deep, keywords, iterationUrl,urlAmount):
@@ -199,6 +208,13 @@ def createKeywordFrequancyTree(root, parent, stoperIndex, deep, keywords, iterat
 #FindKeywords("http://bilgisayar.kocaeli.edu.tr/duyurular.php")
 #FindKeywords("https://tr.wikipedia.org/wiki/Be%C5%9Fikta%C5%9F-Fenerbah%C3%A7e_derbisi")
 start = time.perf_counter()
-indexWebASite("https://www.w3schools.com/python/ref_func_round.asp",["https://www.journaldev.com/33185/python-add-to-array"],3,2)
+baseUrl = "https://www.yusufsezer.com.tr/java-thread/"
+urlSet=["https://umiitkose.com/2015/04/java-thread-islemleri/",
+"https://www.dijitalders.com/icerik/44/5349/java_threading_multithreading.html",
+"https://emrahmete.wordpress.com/2011/10/06/javada-thread-yapisi-ve-kullanimi-hakkinda-ipuclari/",
+"https://yazdoldur.com/programlama/java/java-thread-kavrami-multithreading-ve-olusturma-yontemleri/",
+"https://bilisim.io/2017/01/06/thread-nedir-ve-nasil-tanimlanir/"
+]
+indexWebASite(baseUrl,urlSet,3,2)
 finish = time.perf_counter()
 print(f'Finished in {round(finish-start, 2)} second(s)')
