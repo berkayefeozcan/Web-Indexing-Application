@@ -57,12 +57,12 @@ def FindKeywords(url,keywordAmount):
     # print(titleWords)
     # print(metaTags)
     # print(hTags)
-    resultDic = countWords(titleWords,ratio=11)
+    resultDic={}
+    resultDic = countWords(titleWords,{},ratio=11)
     resultDic = countWords(metaTags,resultDic,7)
 
     for i,tName in enumerate( tagNames) :
        resultDic = countWords(hTags[tName],resultDic,6-i)
-
     return Counter(resultDic).most_common(keywordAmount)
 
 
@@ -99,7 +99,7 @@ def CreateDictionary(clean_list, isKeyword, word_count={}, ratio=1):
         return top
 
 
-def countWords(wordList,word_count={}, ratio=1):
+def countWords(wordList,word_count, ratio=1):
    clean_list = clean_wordlist(wordList)
    for word in clean_list:
       if word in word_count:
@@ -116,24 +116,26 @@ def countWords(wordList,word_count={}, ratio=1):
 def CalculateSimilarity(givenUrl1, givenUrl2):
     url1Keywords = FindKeywords(givenUrl1,5)
     url2Keywords = FindKeywords(givenUrl2,10)
-
     similarityScore = FindSimilarity(url1Keywords, url2Keywords)
-    print(similarityScore)
+    print(similarityScore['score'])
     return {"url1Keywords": url1Keywords, "url2Keywords": url2Keywords, "similarityScore": similarityScore}
 
 
 def FindSimilarity(keywords1, keywords2):
+    
     resultDic = {}
     resultDic['wordCounts'] = {}
     score = 1
+    sum = 0
     for keyWord in keywords1:
+        sum+= keyWord[1][1]
         for word in keywords2:
             if keyWord[0] == word[0]:
                 resultDic['wordCounts'][word[0]] = word[1][1]
-                print(word)
-                score += word[1][1]
-    # kendimce optimize ettim
-    resultDic['score'] = 1
+                score += word[1][1] 
+            
+    
+    resultDic['score'] = (score/sum)*100
     return resultDic
 
 
@@ -207,14 +209,15 @@ def createKeywordFrequancyTree(root, parent, stoperIndex, deep, keywords, iterat
 
 #FindKeywords("http://bilgisayar.kocaeli.edu.tr/duyurular.php")
 #FindKeywords("https://tr.wikipedia.org/wiki/Be%C5%9Fikta%C5%9F-Fenerbah%C3%A7e_derbisi")
-start = time.perf_counter()
-baseUrl = "https://www.yusufsezer.com.tr/java-thread/"
-urlSet=["https://umiitkose.com/2015/04/java-thread-islemleri/",
-"https://www.dijitalders.com/icerik/44/5349/java_threading_multithreading.html",
-"https://emrahmete.wordpress.com/2011/10/06/javada-thread-yapisi-ve-kullanimi-hakkinda-ipuclari/",
-"https://yazdoldur.com/programlama/java/java-thread-kavrami-multithreading-ve-olusturma-yontemleri/",
-"https://bilisim.io/2017/01/06/thread-nedir-ve-nasil-tanimlanir/"
-]
-indexWebASite(baseUrl,urlSet,3,2)
-finish = time.perf_counter()
-print(f'Finished in {round(finish-start, 2)} second(s)')
+# start = time.perf_counter()
+# baseUrl = "https://www.yusufsezer.com.tr/java-thread/"
+# urlSet=["https://umiitkose.com/2015/04/java-thread-islemleri/",
+# "https://www.dijitalders.com/icerik/44/5349/java_threading_multithreading.html",
+# "https://emrahmete.wordpress.com/2011/10/06/javada-thread-yapisi-ve-kullanimi-hakkinda-ipuclari/",
+# "https://yazdoldur.com/programlama/java/java-thread-kavrami-multithreading-ve-olusturma-yontemleri/",
+# "https://bilisim.io/2017/01/06/thread-nedir-ve-nasil-tanimlanir/"
+# ]
+# indexWebASite(baseUrl,urlSet,3,2)
+# finish = time.perf_counter()
+# print(f'Finished in {round(finish-start, 2)} second(s)')
+CalculateSimilarity("https://umiitkose.com/2015/04/java-thread-islemleri/","https://umiitkose.com/2015/04/java-thread-islemleri/")
