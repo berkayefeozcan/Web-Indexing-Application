@@ -6,6 +6,11 @@ from anytree import AnyNode
 from anytree.exporter import JsonExporter
 import time
 import concurrent.futures
+import threading
+
+# gloabal variables
+# urlAmount = 23
+# depth = 3
 
 
 def GetWordsFromUrl(url):
@@ -102,7 +107,7 @@ def countWords(wordList,word_count={}, ratio=1):
       else:
          word_count[word] = ratio
 
-   return word_count;
+   return word_count
 
 # calculation similarity
 
@@ -142,7 +147,7 @@ def getLinksFromAWebSite(url):
     return links
 
 
-def indexWebASite(url, urlSet,depth,urlAmount):
+def indexWebASite(url, urlSet,depth, urlAmount):
     print("indexleme basladi")
     keywords = FindKeywords(url,5)
     exporter = JsonExporter(indent=10, sort_keys=True)
@@ -150,16 +155,27 @@ def indexWebASite(url, urlSet,depth,urlAmount):
        bir siralama yapilacak.
     '''
     resultArr = []
-    for i in urlSet:
-        keywords2= FindKeywords(i,10)
-        kwf = FindSimilarity(keywords, keywords2)['wordCounts']
-        root = AnyNode(urlName=url, kwf=kwf)
-        result = createKeywordFrequancyTree(root, root, depth, 0, keywords, i,urlAmount)
-        print(exporter.export(result))
-        resultArr.append(result)
-        return exporter._export(result)
+   #  with concurrent.futures.ThreadPoolExecutor() as executor:
+   #    results = executor.map(threading, urlSet)
 
+    for i in range(len(urlSet)):
+      t = threading.Thread()
+      t.start()
+      threads.append(t)
+       
+    for res in results:
+      print(res)
+      #   print(exporter.export(result))
+      #   resultArr.append(result)
+   
+   #  return exporter._export(result)
 
+def threading(url, depht, urlAmount, keywords):
+   keywords2= FindKeywords(url,10)
+   kwf = FindSimilarity(keywords, keywords2)['wordCounts']
+   root = AnyNode(urlName=url, kwf=kwf)
+   result = createKeywordFrequancyTree(root, root, depth, 0, keywords, i,urlAmount)
+   return result
 
  
 

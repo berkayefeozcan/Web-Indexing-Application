@@ -9,7 +9,6 @@ export default {
             return response.json();
         } catch (e) {
             console.warn(e);
-
         }
     },
 
@@ -23,7 +22,6 @@ export default {
             return response.json();
         } catch (e) {
             console.warn(e);
-
         }
     }
 }
