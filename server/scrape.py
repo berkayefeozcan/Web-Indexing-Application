@@ -4,6 +4,8 @@ import operator
 from collections import Counter
 from anytree import AnyNode
 from anytree.exporter import JsonExporter
+import time
+import concurrent.futures
 
 
 def GetWordsFromUrl(url):
@@ -26,7 +28,7 @@ def CalculateFrequency(url):
 
 
 # ister 2 icin kullanilan fonksiyon
-def FindKeywords(url):
+def FindKeywords(url,keywordAmount):
     my_source_code = requests.get(url).text
     my_soup = BeautifulSoup(my_source_code, 'html.parser')
     titleWords = my_soup.find('title').text.lower().split()
@@ -36,28 +38,37 @@ def FindKeywords(url):
     ogDescription =  my_soup.find('meta',property='og:description')
     nameDescription =my_soup.find('meta',attrs={'name': 'description'})
    #  print(ogTitle['content'].lower().split())
-    metaTags += ogTitle['content'].lower().split() if ogTitle!= None  else []
+    titleWords += ogTitle['content'].lower().split() if ogTitle!= None  else []
     metaTags +=ogDescription['content'].lower().split() if ogDescription!= None  else []
     metaTags += nameDescription['content'].lower().split() if nameDescription!= None  else []
 
-    tagNames = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+    tagNames = ['h1', 'h2', 'h3']
     for tag in tagNames:
         result = my_soup.find_all(tag)
         if result != None:
             hTags[tag] = []
             for i in result:
                 hTags[tag] += i.text.lower().split()
-  
-    print(titleWords)
-    
-    return []
+    # print(titleWords)
+    # print(metaTags)
+    # print(hTags)
+    resultDic = countWords(titleWords,ratio=11)
+    resultDic = countWords(metaTags,resultDic,7)
+
+    for i,tName in enumerate( tagNames) :
+       resultDic = countWords(hTags[tName],resultDic,6-i)
+
+    return Counter(resultDic).most_common(keywordAmount)
 
 
 # Function removes any unwanted symbols
 def clean_wordlist(wordlist):
     clean_list = []
+    stopwords = ['what']
+
+    wordlist  = [word for word in wordlist if word.lower() not in stopwords and len(word)>3]
     for word in wordlist:
-        symbols = '!@#$%^&*()_-+={[}]|\;:"<>?/., '
+        symbols = '0123456789!@#$%^&*()_+={[}]|\;:"<>?/., x\\'
         for i in range(0, len(symbols)):
             word = word.replace(symbols[i], '')
         if len(word) > 0:
@@ -97,20 +108,20 @@ def countWords(wordList,word_count={}, ratio=1):
 
 
 def CalculateSimilarity(givenUrl1, givenUrl2):
-    url1Keywords = FindKeywords(givenUrl1)
-    url2Keywords = FindKeywords(givenUrl2)
-    url2Freq = CalculateFrequency(givenUrl2)
-    similarityScore = FindSimilarityScore(url1Keywords, url2Freq)
+    url1Keywords = FindKeywords(givenUrl1,5)
+    url2Keywords = FindKeywords(givenUrl2,10)
+
+    similarityScore = FindSimilarity(url1Keywords, url2Keywords)
     print(similarityScore)
     return {"url1Keywords": url1Keywords, "url2Keywords": url2Keywords, "similarityScore": similarityScore}
 
 
-def FindSimilarityScore(listOfKeyword, listOfPerWord):
+def FindSimilarity(keywords1, keywords2):
     resultDic = {}
     resultDic['wordCounts'] = {}
     score = 1
-    for keyWord in listOfKeyword:
-        for word in listOfPerWord:
+    for keyWord in keywords1:
+        for word in keywords2:
             if keyWord[0] == word[0]:
                 resultDic['wordCounts'][word[0]] = word[1]
                 score += word[1]
@@ -131,44 +142,47 @@ def getLinksFromAWebSite(url):
     return links
 
 
-def indexWebASite(url, urlSet):
+def indexWebASite(url, urlSet,depth,urlAmount):
     print("indexleme basladi")
-    keywords = FindKeywords(url)
+    keywords = FindKeywords(url,5)
     exporter = JsonExporter(indent=10, sort_keys=True)
     ''' alinan anahtar kelimesiyle benzerlik orani hesaplanip
        bir siralama yapilacak.
     '''
     resultArr = []
     for i in urlSet:
-        kwf = FindSimilarityFreqWithKeys(keywords, i)['wordCounts']
+        keywords2= FindKeywords(i,10)
+        kwf = FindSimilarity(keywords, keywords2)['wordCounts']
         root = AnyNode(urlName=url, kwf=kwf)
-        result = createKeywordFrequancyTree(root, root, 3, 0, keywords, i)
+        result = createKeywordFrequancyTree(root, root, depth, 0, keywords, i,urlAmount)
         print(exporter.export(result))
         resultArr.append(result)
         return exporter._export(result)
 
 
-def FindSimilarityFreqWithKeys(keywordArr, url):
 
-    freq = CalculateFrequency(url)
-    return FindSimilarityScore(keywordArr, freq)
+ 
 
     # return exporter._export(root)
 
 
-def createKeywordFrequancyTree(root, parent, stoperIndex, deep, keywords, iterationUrl):
+def createKeywordFrequancyTree(root, parent, stoperIndex, deep, keywords, iterationUrl,urlAmount):
     # bu fonkisyon verilen url in alt urllerine bakarak skor hesaplar
     if stoperIndex == deep:
         return root
-    urlList = getLinksFromAWebSite(iterationUrl)[0:4]
+    urlList = getLinksFromAWebSite(iterationUrl)[0:urlAmount]
     for url in urlList:
-        kwf = FindSimilarityFreqWithKeys(keywords, url)['wordCounts']
+        keywords2= FindKeywords(url,10)
+        kwf = FindSimilarity(keywords, keywords2)['wordCounts']
         newParent = AnyNode(urlName=url, kwf=kwf, parent=parent)
         newDeep = deep+1
-        createKeywordFrequancyTree(
-            root, newParent, stoperIndex, newDeep, keywords, url)
+        createKeywordFrequancyTree(root, newParent, stoperIndex, newDeep, keywords, url,urlAmount)
     return root
 
 
 #FindKeywords("http://bilgisayar.kocaeli.edu.tr/duyurular.php")
-FindKeywords("https://www.cio.com/middle-east/")
+#FindKeywords("https://tr.wikipedia.org/wiki/Be%C5%9Fikta%C5%9F-Fenerbah%C3%A7e_derbisi")
+start = time.perf_counter()
+indexWebASite("https://www.w3schools.com/python/ref_func_round.asp",["https://www.journaldev.com/33185/python-add-to-array"],3,2)
+finish = time.perf_counter()
+print(f'Finished in {round(finish-start, 2)} second(s)')
