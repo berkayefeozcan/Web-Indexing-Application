@@ -4,6 +4,11 @@ import operator
 from collections import Counter
 from anytree import AnyNode
 from anytree.exporter import JsonExporter
+import time
+import concurrent.futures
+
+t1 = time.perf_counter()
+
 def GetWordsFromUrl(url):
    my_wordlist = []
    my_source_code = requests.get(url).text
@@ -102,8 +107,8 @@ def indexWebASite(url,urlSet):
     '''
    resultArr =[]
    for i in urlSet : 
-      kwf=  FindSimilarityFreqWithKeys(keywords,i)['wordCounts']
-      root = AnyNode(urlName=url,kwf=kwf)
+      keywordFreq =  FindSimilarityFreqWithKeys(keywords,i)['wordCounts']
+      root = AnyNode(urlName=url,kwf=keywordFreq)
       result = createKeywordFrequancyTree(root,root,3,0,keywords,i)
       print(exporter.export(result))
       resultArr.append(result)
@@ -114,7 +119,7 @@ def FindSimilarityFreqWithKeys(keywordArr, url):
    freq = CalculateFrequency(url)
    return FindSimilarityScore(keywordArr,freq)
    
-   # return exporter._export(root)
+   
   
        
 def createKeywordFrequancyTree(root,parent,stoperIndex,deep,keywords,iterationUrl):
@@ -128,10 +133,10 @@ def createKeywordFrequancyTree(root,parent,stoperIndex,deep,keywords,iterationUr
       newDeep = deep+1
       createKeywordFrequancyTree(root,newParent,stoperIndex,newDeep,keywords,url)
    return root
-
-#getLinksFromAWebSite("http://bilgisayar.kocaeli.edu.tr/duyurular.php")
-# indexWebASite("https://www.w3schools.com/python/ref_func_round.asp",["https://www.journaldev.com/33185/python-add-to-array"])     
+ 
+getLinksFromAWebSite("http://bilgisayar.kocaeli.edu.tr/duyurular.php")
+indexWebASite("https://www.w3schools.com/python/ref_func_round.asp",["https://www.journaldev.com/33185/python-add-to-array"])     
    
-
+t2 = time.perf_counter()
    
 
