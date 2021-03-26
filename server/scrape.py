@@ -7,10 +7,28 @@ from anytree.exporter import JsonExporter
 import time
 import concurrent.futures
 from threading import Thread
+from nltk.corpus import wordnet as wn
 
 # gloabal variables
 # urlAmount = 23
 # depth = 3
+
+# alternative base similarity calculator method -> h taglari ve diger tum taglar ayri ayri skorlanadabilir ileriki donemde.
+def CalculateSimilarity2(url1, url2):
+    word_count1 = {}
+    word_count2 = {}
+    word_count1   = countWords(GetWordsFromUrl(url1), word_count1)
+    word_count2 = countWords(GetWordsFromUrl(url2), word_count2)
+
+    url1Keywords = Counter(word_count1).most_common(10)
+    url2Keywords = Counter(word_count2).most_common(len(word_count2))
+
+    print(url1Keywords)
+    print(url2Keywords)
+    similarityScore = FindSimilarity(url1Keywords, url2Keywords)
+    # print(similarityScore['score'])
+    return {"url1Keywords": url1Keywords, "url2Keywords": url2Keywords, "similarityScore": similarityScore}
+
 
 
 def GetWordsFromUrl(url):
@@ -69,11 +87,11 @@ def FindKeywords(url,keywordAmount):
 # Function removes any unwanted symbols
 def clean_wordlist(wordlist):
     clean_list = []
-    stopwords = ['what']
-
-    wordlist  = [word for word in wordlist if word.lower() not in stopwords and len(word)>3]
+    stopwords = ['what','you','için','bir', 'iki', 'this', 'be','by','can','could', 'that','should', 'is', 'are', 'for', 'was', 'were', 'icin','bu','su','o','it','he','she','it','they' 'but', 'with', 'as', 'get', 'on', 'of', 'to', 'in', 'da', 'ki', 've', 'ama', 'the', 'a', 'and', 'an']
+    # filters word according to strig length
+    wordlist  = [word for word in wordlist if word.lower() not in stopwords and len(word) > 2]
     for word in wordlist:
-        symbols = '0123456789!@#$%^&*()_+={[}]|\;:"<>?/., x\\'
+        symbols = '0123456789!@$%^&*()_+={[}]|\;:"<>?/., x\\'
         for i in range(0, len(symbols)):
             word = word.replace(symbols[i], '')
         if len(word) > 0:
@@ -81,7 +99,7 @@ def clean_wordlist(wordlist):
     return clean_list
 
 
-def CreateDictionary(clean_list, isKeyword, word_count={}, ratio=1):
+def CreateDictionary(clean_list, isKeyword, word_count={}, ratio=0):
    
     for word in clean_list:
         if word in word_count:
@@ -98,7 +116,7 @@ def CreateDictionary(clean_list, isKeyword, word_count={}, ratio=1):
         top = c.most_common(len(word_count))
         return top
 
-
+# count given list words and add them given dictionary object
 def countWords(wordList,word_count, ratio=1):
    clean_list = clean_wordlist(wordList)
    for word in clean_list:
@@ -116,28 +134,63 @@ def countWords(wordList,word_count, ratio=1):
 def CalculateSimilarity(givenUrl1, givenUrl2):
     url1Keywords = FindKeywords(givenUrl1,5)
     url2Keywords = FindKeywords(givenUrl2,10)
+    print(url1Keywords)
+    print(url2Keywords)
     similarityScore = FindSimilarity(url1Keywords, url2Keywords)
-    print(similarityScore['score'])
+    # print(similarityScore['score'])
     return {"url1Keywords": url1Keywords, "url2Keywords": url2Keywords, "similarityScore": similarityScore}
 
 
 def FindSimilarity(keywords1, keywords2):
-    
     resultDic = {}
     resultDic['wordCounts'] = {}
+    resultDic['synonymWords'] = {}
     score = 1
     sum = 0
     for keyWord in keywords1:
-        sum+= keyWord[1][1]
+        print()
+        print(f'word1: {keyWord[0]}')
+        synonymWords = FindSynonymsWordsGivenParameterWord(keyWord[0])
+        print(synonymWords)
         for word in keywords2:
+            sum += word[1][1]
             if keyWord[0] == word[0]:
                 resultDic['wordCounts'][word[0]] = word[1][1]
-                score += word[1][1] 
-            
-    
-    resultDic['score'] = (score/sum)*100
+                score *= word[1][1]
+            else:
+                print(f'word2: {word[0]}')
+                if len(synonymWords) > 0:
+                    for synWord in synonymWords:
+                        if synWord == word[0]:
+                            resultDic['synonymWords'][keyWord[0]] = word[0]
+                            score *= word[1][1]
+   
+    resultDic['score'] = (score/sum)
+    print(resultDic)
     return resultDic
 
+def FindSynonymsWordsGivenParameterWord(word):
+    
+    SynonymsWordList=[]
+    for syn in wn.synsets(word):
+	                for l in syn.lemmas():
+                          if l.name() !=word:
+                              SynonymsWordList.append(l.name())
+    
+    uniqueList=unique(SynonymsWordList)
+    # for synonymsWord in SynonymsWordList:
+    #     if not wn.synsets(synonymsWord):
+    #         uniqueList.remove(synonymsWord)
+    # print(uniqueList)
+    return uniqueList
+
+# function to get unique values
+def unique(list1):
+    unique_list = []
+    for x in list1:
+        if x not in unique_list:
+            unique_list.append(x)
+    return unique_list
 
 def getLinksFromAWebSite(url):
     links = []
@@ -153,7 +206,7 @@ def getLinksFromAWebSite(url):
 
 
 resultArr = []
-def indexWebASite(url, urlSet,depth, urlAmount):
+def IndexWebSite(url, urlSet,depth, urlAmount):
     print("indexleme basladi")
     keywords = FindKeywords(url,5)
     
@@ -164,10 +217,10 @@ def indexWebASite(url, urlSet,depth, urlAmount):
    #    results = executor.map(threading, urlSet)
     threads=[]
     for i in range(len(urlSet)):
-      t =Thread(target=threading, args=(urlSet[i],depth,urlAmount,keywords))
+      t =Thread(target=IndexSiteWithThread, args=(urlSet[i],depth,urlAmount,keywords))
       t.start()
       threads.append(t)
-
+                                    
     for  thread in threads:
         thread.join()
     
@@ -183,7 +236,8 @@ def indexWebASite(url, urlSet,depth, urlAmount):
    
    #  return exporter._export(result)
 
-def threading(url, depht, urlAmount, keywords):
+# used one thread while using indexing per site
+def IndexSiteWithThread(url, depht, urlAmount, keywords):
    exporter = JsonExporter(indent=10, sort_keys=True)
    keywords2= FindKeywords(url,10)
    kwf = FindSimilarity(keywords, keywords2)['wordCounts']
@@ -217,7 +271,7 @@ def createKeywordFrequancyTree(root, parent, stoperIndex, deep, keywords, iterat
 # "https://yazdoldur.com/programlama/java/java-thread-kavrami-multithreading-ve-olusturma-yontemleri/",
 # "https://bilisim.io/2017/01/06/thread-nedir-ve-nasil-tanimlanir/"
 # ]
-# indexWebASite(baseUrl,urlSet,3,2)
+# IndexWebSite(baseUrl,urlSet,3,2)
 # finish = time.perf_counter()
 # print(f'Finished in {round(finish-start, 2)} second(s)')
-CalculateSimilarity("https://umiitkose.com/2015/04/java-thread-islemleri/","https://umiitkose.com/2015/04/java-thread-islemleri/")
+CalculateSimilarity2("https://www.python.org/about/gettingstarted/","https://www.programiz.com/python-programming")
