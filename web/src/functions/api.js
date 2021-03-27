@@ -23,5 +23,23 @@ export default {
         } catch (e) {
             console.warn(e);
         }
+    },
+    async indexWebSite(jsonObject)
+    {
+        try {
+            const fetchResult = fetch(`${metrics.URL}/indexAndSort`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonObject)
+            })
+            const response = await fetchResult;            
+            return response.json();
+        } catch (e) {
+            console.warn(e);
+        }
     }
+    
 }

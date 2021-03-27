@@ -47,11 +47,12 @@ def CalculateSim():
         res = make_response(jsonify({"message":"error"}), 404)
     return res
 
-@app.route('/indexAndSort', methods=['GET'])
+@app.route('/indexAndSort', methods=['POST'])
 def indexAndSort():
-  baseUrl = "https://en.wikipedia.org/wiki/Virus"
-  urlSet=["https://www.worldometers.info/coronavirus/","https://www.worldometers.info/coronavirus/country/turkey/","https://www.aa.com.tr/en/latest-on-coronavirus-outbreak/turkey-reports-over-28-000-new-coronavirus-cases/2188507"]
- 
+  reqBody = request.get_json()
+  baseUrl = reqBody['baseUrl']
+  urlSet= reqBody['urlSet']
+  
   resultArr =  scrape.IndexWebSite(baseUrl,urlSet,3,2) 
 
   print(len(resultArr))
