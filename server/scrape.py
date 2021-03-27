@@ -12,22 +12,25 @@ from nltk.corpus import wordnet as wn
 # gloabal variables
 # urlAmount = 23
 # depth = 3
-
+isSemantic = True
+resultArr = []
+def setIsSemantic(value):
+    isSemantic = value
 # alternative base similarity calculator method -> h taglari ve diger tum taglar ayri ayri skorlanadabilir ileriki donemde.
-def CalculateSimilarity2(url1, url2):
-    word_count1 = {}
-    word_count2 = {}
-    word_count1   = countWords(GetWordsFromUrl(url1), word_count1)
-    word_count2 = countWords(GetWordsFromUrl(url2), word_count2)
+# def CalculateSimilarity2(url1, url2):
+#     word_count1 = {}
+#     word_count2 = {}
+#     word_count1   = countWords(GetWordsFromUrl(url1), word_count1)
+#     word_count2 = countWords(GetWordsFromUrl(url2), word_count2)
 
-    url1Keywords = Counter(word_count1).most_common(10)
-    url2Keywords = Counter(word_count2).most_common(len(word_count2))
+#     url1Keywords = Counter(word_count1).most_common(10)
+#     url2Keywords = Counter(word_count2).most_common(len(word_count2))
 
-    print(url1Keywords)
-    print(url2Keywords)
-    similarityScore = FindSimilarity(url1Keywords, url2Keywords)
-    # print(similarityScore['score'])
-    return {"url1Keywords": url1Keywords, "url2Keywords": url2Keywords, "similarityScore": similarityScore}
+#     print(url1Keywords)
+#     print(url2Keywords)
+#     similarityScore = FindSimilarity(url1Keywords, url2Keywords)
+#     # print(similarityScore['score'])
+#     return {"url1Keywords": url1Keywords, "url2Keywords": url2Keywords, "similarityScore": similarityScore}
 
 
 
@@ -52,21 +55,29 @@ def CalculateFrequency(url):
 
 # ister 2 icin kullanilan fonksiyon
 def FindKeywords(url, keywordAmount):
-    my_source_code = requests.get(url).text
-    my_soup = BeautifulSoup(my_source_code, 'html.parser')
-    title = my_soup.find('title')
-    titleWords = title.text.lower().split() if title!=None else []
+    try:
+        r= requests.get(url)
+        my_source_code = r.text
+        my_soup = BeautifulSoup(my_source_code, 'html.parser')
+    except :
+        return Counter({}).most_common(keywordAmount)
+        
     metaTags = []
     hTags = {}
+    title = my_soup.find('title')
     ogTitle = my_soup.find('meta', property='og:title')
     ogDescription = my_soup.find('meta', property='og:description')
     nameDescription = my_soup.find('meta', attrs={'name': 'description'})
    #  print(ogTitle['content'].lower().split())
-    titleWords += ogTitle['content'].lower().split() if ogTitle != None else []
-    metaTags += ogDescription['content'].lower(
-    ).split() if ogDescription != None else []
-    metaTags += nameDescription['content'].lower(
-    ).split() if nameDescription != None else []
+    try:
+        titleWords = title.text.lower().split() if title!=None else []
+        titleWords += ogTitle['content'].lower().split() if ogTitle != None else []
+        metaTags += ogDescription['content'].lower(
+        ).split() if ogDescription != None else []
+        metaTags += nameDescription['content'].lower(
+        ).split() if nameDescription != None else []
+    except print(0):
+        pass
 
     tagNames = ['h1', 'h2', 'h3']
     for tag in tagNames:
@@ -132,43 +143,40 @@ def countWords(wordList,word_count, ratio=1):
     return word_count
 
 # calculation similarity
-
-
-def CalculateSimilarity(givenUrl1, givenUrl2):
-    url1Keywords = FindKeywords(givenUrl1,5)
-    url2Keywords = FindKeywords(givenUrl2,10)
-    print(url1Keywords)
-    print(url2Keywords)
-    similarityScore = FindSimilarity(url1Keywords, url2Keywords)
-    # print(similarityScore['score'])
-    return {"url1Keywords": url1Keywords, "url2Keywords": url2Keywords, "similarityScore": similarityScore}
-
-
-def FindSimilarity(keywords1, keywords2,flag=False):
+def FindSimilarity(keywords1, keywords2):
     resultDic = {}
     resultDic['wordCounts']={}
+    resultDic['synonymWords']={}
     resultDic['score'] = 1
+
     score = 1
     sum = 0
     for keyWord in keywords1:
         #print()
         #print(f'word1: {keyWord[0]}')
-        if flag : synonymWords = FindSynonymsWordsGivenParameterWord(keyWord[0])
+        try:
+            if isSemantic : synonymWords = FindSynonymsWordsGivenParameterWord(keyWord[0])
+        except Exception:
+            continue
         #print(synonymWords)
         for word in keywords2:
             sum += word[1][1]
             if keyWord[0] == word[0]:
                 resultDic['wordCounts'][word[0]] = word[1][1]
                 score *= word[1][1]
-            if flag:
-               # print(f'word2: {word[0]}')
-                if len(synonymWords) > 0:
-                    for synWord in synonymWords:
-                        if synWord == word[0]:
-                            resultDic['synonymWords'][keyWord[0]] = word[0]
-                            score *= word[1][1]
-   
-    resultDic['score'] = (score/sum)
+            try:
+                if isSemantic:
+                   # print(f'word2: {word[0]}')
+                    if len(synonymWords) > 0:
+                        for synWord in synonymWords:
+                            if synWord == word[0]:
+                                resultDic['synonymWords'][keyWord[0]] = word[0]
+                                score *= word[1][1]
+            except Exception:
+                continue
+            
+
+    resultDic['score'] = (score/sum) if sum!=0 else 0
     return resultDic
 
 def FindSynonymsWordsGivenParameterWord(word):
@@ -212,18 +220,16 @@ def bubbleSort(arr):
         for j in range(0, n-i-1):
             if arr[j]['score'] < arr[j+1]['score'] :
                 arr[j], arr[j+1] = arr[j+1], arr[j]
-resultArr = []
-def IndexWebSite(url, urlSet,depth, urlAmount):
+
+def IndexWebSite(url, urlSet,depth, urlAmount,flag=False):
     print("indexleme basladi")
     keywords = FindKeywords(url, 5)
     print(keywords)
-
-    ''' alinan anahtar kelimesiyle benzerlik orani hesaplanip
-       bir siralama yapilacak.
-    '''
-    #  with concurrent.futures.ThreadPoolExecutor() as executor:     
-    #    results = executor.map(threading, urlSet)
+    if(len(keywords)==0) : return []   
     threads = []
+    global resultArr 
+    resultArr= []
+    wn.ensure_loaded()
     for i in range(len(urlSet)):
       t =Thread(target=IndexSiteWithThread, args=(urlSet[i],depth,urlAmount,keywords))
       t.start()
@@ -233,28 +239,26 @@ def IndexWebSite(url, urlSet,depth, urlAmount):
         thread.join()
 
     bubbleSort(resultArr)    
-
-    return resultArr;
-    # for r in resultArr :
-    #     f = open("demofile2.txt", "a")
-    #     f.write(f"{r}")
-    #     f.close()
-       
-    # for res in results:
-    #   print(res)
-        #   print(exporter.export(result))
-        #   resultArr.append(result)
+    return resultArr
 
 # used one thread while using indexing per site
 def IndexSiteWithThread(url, depht, urlAmount, keywords):
+
    exporter = JsonExporter(indent=10, sort_keys=True)
    resultDic={}
    resultDic['urlName'] = url;
    keywords2= FindKeywords(url,10)
+   if(len(keywords2)==0) :
+      return 
    similartyDic = FindSimilarity(keywords, keywords2)
    kwf= similartyDic['wordCounts']
    resultDic['score'] = similartyDic['score']
-   root = AnyNode(urlName=url, kwf=kwf)
+   root = None
+   if isSemantic : 
+        print('calisiyor aga')
+        root  = AnyNode(urlName=url, kwf=kwf,synonymWords=similartyDic['synonymWords'])
+   else : 
+        root = AnyNode(urlName=url, kwf=kwf) 
    root = createKeywordFrequancyTree(root, root, depht, 0, keywords, url,urlAmount,resultDic,[])
    resultDic['tree'] = exporter._export(root)
    resultArr.append(resultDic)
@@ -271,7 +275,11 @@ def createKeywordFrequancyTree(root, parent, stoperIndex, deep, keywords, iterat
         similartyDic = FindSimilarity(keywords, keywords2)
         kwf= similartyDic['wordCounts']
         resultDic['score'] += (similartyDic['score'] /(deep+2))
-        newParent = AnyNode(urlName=url, kwf=kwf, parent=parent)
+        if isSemantic : 
+            newParent =AnyNode(urlName=url, kwf=kwf, parent=parent,synonymWords=similartyDic['synonymWords'])
+        else : 
+            newParent = AnyNode(urlName=url, kwf=kwf, parent=parent) 
+
         newDeep = deep+1
         createKeywordFrequancyTree(
             root, newParent, stoperIndex, newDeep, keywords, url, urlAmount,resultDic,chosenUrl)
