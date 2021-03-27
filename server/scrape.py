@@ -50,7 +50,7 @@ def GetWordsFromUrl(url):
 
 def CalculateFrequency(url):
     wordList = GetWordsFromUrl(url)
-    return CreateDictionary(wordList, False)
+    return CreateDictionary(wordList, False,ratio=1)
 
 
 # ister 2 icin kullanilan fonksiyon
@@ -135,10 +135,10 @@ def countWords(wordList,word_count, ratio=1):
     clean_list = clean_wordlist(wordList)
     for word in clean_list:
       if word in word_count:
-         word_count[word][0] += ratio
-         word_count[word][1] += 1
+         word_count[word][1] += ratio
+         word_count[word][0] += 1
       else:
-         word_count[word] = [ratio,1]
+         word_count[word] = [1,ratio]
 
     return word_count
 

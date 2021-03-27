@@ -39,7 +39,7 @@ def CalculateSim():
     givenUrlTwo = request.args.get('givenUrlTwo') 
     try:
         url1Keywords= scrape.FindKeywords(givenUrlOne,5)
-        url2Keywords = scrape.FindKeywords(givenUrlTwo,10)
+        url2Keywords = scrape.FindKeywords(givenUrlTwo,5)
         similarityScore = scrape.FindSimilarity(url1Keywords, url2Keywords)
         result = {"url1Keywords": url1Keywords, "url2Keywords": url2Keywords, "similarityScore": similarityScore}
         res = make_response(jsonify({"message": "OK" , "result":result}), 200)
