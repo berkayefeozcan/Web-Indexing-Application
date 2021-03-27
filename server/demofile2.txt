@@ -1,397 +1,44 @@
 {
-          "kwf": {
-                    "java": 31,
-                    "nedir": 15,
-                    "thread": 24
-          },
-          "urlName": "https://umiitkose.com/2015/04/java-thread-islemleri/"
-}{
           "children": [
                     {
                               "children": [
                                         {
                                                   "children": [
                                                             {
-                                                                      "kwf": {
-                                                                                "java": 35,
-                                                                                "nedir": 17,
-                                                                                "thread": 24
-                                                                      },
-                                                                      "urlName": "https://bilisim.io/"
-                                                            },
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 42,
-                                                                                "nedir": 18,
-                                                                                "thread": 24
-                                                                      },
-                                                                      "urlName": "https://bilisim.io/java-jdk-jvm-spring-framework-hibernate/"
-                                                            }
-                                                  ],
-                                                  "kwf": {
-                                                            "java": 23,
-                                                            "nedir": 10,
-                                                            "thread": 19
-                                                  },
-                                                  "urlName": "https://bilisim.io/"
-                                        },
-                                        {
-                                                  "children": [
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 55,
-                                                                                "thread": 24
-                                                                      },
-                                                                      "urlName": "https://bilisim.io/"
-                                                            },
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 62,
-                                                                                "thread": 24
-                                                                      },
-                                                                      "urlName": "https://bilisim.io/java-jdk-jvm-spring-framework-hibernate/"
-                                                            }
-                                                  ],
-                                                  "kwf": {
-                                                            "java": 49,
-                                                            "nedir": 19,
-                                                            "thread": 24
-                                                  },
-                                                  "urlName": "https://bilisim.io/java-jdk-jvm-spring-framework-hibernate/"
-                                        }
-                              ],
-                              "kwf": {
-                                        "java": 19,
-                                        "nedir": 8,
-                                        "thread": 19
-                              },
-                              "urlName": "https://bilisim.io/"
-                    },
-                    {
-                              "children": [
-                                        {
-                                                  "children": [
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 79
-                                                                      },
-                                                                      "urlName": "https://bilisim.io/"
-                                                            },
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 86
-                                                                      },
-                                                                      "urlName": "https://bilisim.io/java-jdk-jvm-spring-framework-hibernate/"
-                                                            }
-                                                  ],
-                                                  "kwf": {
-                                                            "java": 75
-                                                  },
-                                                  "urlName": "https://bilisim.io/"
-                                        },
-                                        {
-                                                  "children": [
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 99
-                                                                      },
-                                                                      "urlName": "https://bilisim.io/"
-                                                            },
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 106
-                                                                      },
-                                                                      "urlName": "https://bilisim.io/java-jdk-jvm-spring-framework-hibernate/"
-                                                            }
-                                                  ],
-                                                  "kwf": {
-                                                            "java": 93
-                                                  },
-                                                  "urlName": "https://bilisim.io/java-jdk-jvm-spring-framework-hibernate/"
-                                        }
-                              ],
-                              "kwf": {
-                                        "java": 69,
-                                        "thread": 24
-                              },
-                              "urlName": "https://bilisim.io/java-jdk-jvm-spring-framework-hibernate/"
-                    }
-          ],
-          "kwf": {
-                    "java": 6,
-                    "nedir": 6,
-                    "sezer": 3,
-                    "thread": 13,
-                    "yusuf": 3
-          },
-          "urlName": "https://bilisim.io/2017/01/06/thread-nedir-ve-nasil-tanimlanir/"
-}{
-          "children": [
-                    {
-                              "children": [
-                                        {
-                                                  "children": [
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 71
-                                                                      },
-                                                                      "urlName": "https://emrahmete.wordpress.com/"
-                                                            },
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 75
-                                                                      },
-                                                                      "urlName": "https://emrahmete.wordpress.com/sunumlarim/"
-                                                            }
-                                                  ],
-                                                  "kwf": {
-                                                            "java": 51,
-                                                            "thread": 24
-                                                  },
-                                                  "urlName": "https://emrahmete.wordpress.com/"
-                                        },
-                                        {
-                                                  "children": [
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 93
-                                                                      },
-                                                                      "urlName": "https://emrahmete.wordpress.com/"
-                                                            },
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 99
-                                                                      },
-                                                                      "urlName": "https://emrahmete.wordpress.com/sunumlarim/"
-                                                            }
-                                                  ],
-                                                  "kwf": {
-                                                            "java": 79
-                                                  },
-                                                  "urlName": "https://emrahmete.wordpress.com/sunumlarim/"
-                                        }
-                              ],
-                              "kwf": {
-                                        "java": 23,
-                                        "thread": 19
-                              },
-                              "urlName": "https://emrahmete.wordpress.com/"
-                    },
-                    {
-                              "children": [
-                                        {
-                                                  "children": [
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 108
-                                                                      },
-                                                                      "urlName": "https://emrahmete.wordpress.com/"
-                                                            },
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 108
-                                                                      },
-                                                                      "urlName": "https://emrahmete.wordpress.com/sunumlarim/"
-                                                            }
-                                                  ],
-                                                  "kwf": {
-                                                            "java": 106
-                                                  },
-                                                  "urlName": "https://emrahmete.wordpress.com/"
-                                        },
-                                        {
-                                                  "children": [
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 110
-                                                                      },
-                                                                      "urlName": "https://emrahmete.wordpress.com/"
-                                                            },
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 110
-                                                                      },
-                                                                      "urlName": "https://emrahmete.wordpress.com/sunumlarim/"
-                                                            }
-                                                  ],
-                                                  "kwf": {
-                                                            "java": 108
-                                                  },
-                                                  "urlName": "https://emrahmete.wordpress.com/sunumlarim/"
-                                        }
-                              ],
-                              "kwf": {
-                                        "java": 106
-                              },
-                              "urlName": "https://emrahmete.wordpress.com/sunumlarim/"
-                    }
-          ],
-          "kwf": {
-                    "java": 13,
-                    "nedir": 6,
-                    "thread": 17
-          },
-          "urlName": "https://emrahmete.wordpress.com/2011/10/06/javada-thread-yapisi-ve-kullanimi-hakkinda-ipuclari/"
-}{
-          "children": [
-                    {
-                              "children": [
-                                        {
-                                                  "children": [
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 71,
-                                                                                "thread": 24
-                                                                      },
-                                                                      "urlName": "https://yazdoldur.com"
-                                                            },
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 75
-                                                                      },
-                                                                      "urlName": "https://yazdoldur.com/category/3d-printer/"
-                                                            }
-                                                  ],
-                                                  "kwf": {
-                                                            "java": 51,
-                                                            "thread": 24
-                                                  },
-                                                  "urlName": "https://yazdoldur.com"
-                                        },
-                                        {
-                                                  "children": [
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 95
-                                                                      },
-                                                                      "urlName": "https://yazdoldur.com"
-                                                            },
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 106
-                                                                      },
-                                                                      "urlName": "https://yazdoldur.com/category/3d-printer/"
-                                                            }
-                                                  ],
-                                                  "kwf": {
-                                                            "java": 79
-                                                  },
-                                                  "urlName": "https://yazdoldur.com/category/3d-printer/"
-                                        }
-                              ],
-                              "kwf": {
-                                        "java": 25,
-                                        "nedir": 11,
-                                        "thread": 19
-                              },
-                              "urlName": "https://yazdoldur.com"
-                    },
-                    {
-                              "children": [
-                                        {
-                                                  "children": [
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 110
-                                                                      },
-                                                                      "urlName": "https://yazdoldur.com"
-                                                            },
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 110
-                                                                      },
-                                                                      "urlName": "https://yazdoldur.com/category/3d-printer/"
-                                                            }
-                                                  ],
-                                                  "kwf": {
-                                                            "java": 108
-                                                  },
-                                                  "urlName": "https://yazdoldur.com"
-                                        },
-                                        {
-                                                  "children": [
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 112
-                                                                      },
-                                                                      "urlName": "https://yazdoldur.com"
-                                                            },
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 112
-                                                                      },
-                                                                      "urlName": "https://yazdoldur.com/category/3d-printer/"
-                                                            }
-                                                  ],
-                                                  "kwf": {
-                                                            "java": 110
-                                                  },
-                                                  "urlName": "https://yazdoldur.com/category/3d-printer/"
-                                        }
-                              ],
-                              "kwf": {
-                                        "java": 106
-                              },
-                              "urlName": "https://yazdoldur.com/category/3d-printer/"
-                    }
-          ],
-          "kwf": {
-                    "java": 15,
-                    "nedir": 6,
-                    "thread": 19
-          },
-          "urlName": "https://yazdoldur.com/programlama/java/java-thread-kavrami-multithreading-ve-olusturma-yontemleri/"
-}{
-          "children": [
-                    {
-                              "children": [
-                                        {
-                                                  "children": [
-                                                            {
-                                                                      "kwf": {
-                                                                                "java": 75
-                                                                      },
+                                                                      "kwf": {},
+                                                                      "name": "a",
                                                                       "urlName": "https://www.dijitalders.com/"
                                                             },
                                                             {
-                                                                      "kwf": {
-                                                                                "java": 99
-                                                                      },
+                                                                      "kwf": {},
+                                                                      "name": "a",
                                                                       "urlName": "https://www.dijitalders.com/galeriler/"
                                                             }
                                                   ],
-                                                  "kwf": {
-                                                            "java": 55,
-                                                            "thread": 24
-                                                  },
+                                                  "kwf": {},
+                                                  "name": "a",
                                                   "urlName": "https://www.dijitalders.com/"
                                         },
                                         {
                                                   "children": [
                                                             {
-                                                                      "kwf": {
-                                                                                "java": 106
-                                                                      },
+                                                                      "kwf": {},
+                                                                      "name": "a",
                                                                       "urlName": "https://www.dijitalders.com/"
                                                             },
                                                             {
-                                                                      "kwf": {
-                                                                                "java": 108
-                                                                      },
+                                                                      "kwf": {},
+                                                                      "name": "a",
                                                                       "urlName": "https://www.dijitalders.com/galeriler/"
                                                             }
                                                   ],
-                                                  "kwf": {
-                                                            "java": 106
-                                                  },
+                                                  "kwf": {},
+                                                  "name": "a",
                                                   "urlName": "https://www.dijitalders.com/galeriler/"
                                         }
                               ],
-                              "kwf": {
-                                        "java": 25,
-                                        "nedir": 15,
-                                        "thread": 19
-                              },
+                              "kwf": {},
+                              "name": "a",
                               "urlName": "https://www.dijitalders.com/"
                     },
                     {
@@ -399,78 +46,45 @@
                                         {
                                                   "children": [
                                                             {
-                                                                      "kwf": {
-                                                                                "java": 110
-                                                                      },
+                                                                      "kwf": {},
+                                                                      "name": "a",
                                                                       "urlName": "https://www.dijitalders.com/"
                                                             },
                                                             {
-                                                                      "kwf": {
-                                                                                "java": 112
-                                                                      },
+                                                                      "kwf": {},
+                                                                      "name": "a",
                                                                       "urlName": "https://www.dijitalders.com/galeriler/"
                                                             }
                                                   ],
-                                                  "kwf": {
-                                                            "java": 110
-                                                  },
+                                                  "kwf": {},
+                                                  "name": "a",
                                                   "urlName": "https://www.dijitalders.com/"
                                         },
                                         {
                                                   "children": [
                                                             {
-                                                                      "kwf": {
-                                                                                "java": 112
-                                                                      },
+                                                                      "kwf": {},
+                                                                      "name": "a",
                                                                       "urlName": "https://www.dijitalders.com/"
                                                             },
                                                             {
-                                                                      "kwf": {
-                                                                                "java": 112
-                                                                      },
+                                                                      "kwf": {},
+                                                                      "name": "a",
                                                                       "urlName": "https://www.dijitalders.com/galeriler/"
                                                             }
                                                   ],
-                                                  "kwf": {
-                                                            "java": 112
-                                                  },
+                                                  "kwf": {},
+                                                  "name": "a",
                                                   "urlName": "https://www.dijitalders.com/galeriler/"
                                         }
                               ],
-                              "kwf": {
-                                        "java": 108
-                              },
+                              "kwf": {},
+                              "name": "a",
                               "urlName": "https://www.dijitalders.com/galeriler/"
                     }
           ],
           "kwf": {
-                    "java": 11,
-                    "nedir": 6,
-                    "sezer": 3,
-                    "thread": 13,
-                    "yusuf": 3
+                    "java": 5
           },
           "urlName": "https://www.dijitalders.com/icerik/44/5349/java_threading_multithreading.html"
-}{
-          "kwf": {
-                    "java": 5,
-                    "thread": 5
-          },
-          "name": "b",
-          "urlName": "https://umiitkose.com/2015/04/java-thread-islemleri/"
-}{
-          "kwf": {
-                    "java": 5,
-                    "thread": 5
-          },
-          "name": "b",
-          "urlName": "https://umiitkose.com/2015/04/java-thread-islemleri/"
-}{
-          "kwf": {
-                    "java": 5,
-                    "nedir": 3,
-                    "thread": 5
-          },
-          "name": "b",
-          "urlName": "https://umiitkose.com/2015/04/java-thread-islemleri/"
 }

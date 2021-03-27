@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request, jsonify, make_response
 from flask_cors import CORS
-from scrape import CalculateFrequency, FindKeywords, CalculateSimilarity,indexWebASite
+from scrape import CalculateFrequency, FindKeywords, CalculateSimilarity,IndexWebSite
 import json 
 
 app = Flask(__name__)
@@ -47,7 +47,10 @@ def CalculateSim():
 
 @app.route('/indexAndSort', methods=['GET'])
 def indexAndSort():
-  return ({"result":indexWebASite("https://www.w3schools.com/python/ref_func_round.asp",["https://www.journaldev.com/33185/python-add-to-array"])})
+  baseUrl = "https://www.yusufsezer.com.tr/java-thread/"
+  urlSet=["https://www.tutorialspoint.com/java/index.htm","https://yazdoldur.com/programlama/java/java-thread-kavrami-multithreading-ve-olusturma-yontemleri/","https://bilisim.io/2017/01/06/thread-nedir-ve-nasil-tanimlanir/"]
+  resultArr = IndexWebSite(baseUrl,urlSet,3,2)
+  return jsonify({"result":resultArr})
 
 if __name__ == "__main__":
     app.run(debug=True)
