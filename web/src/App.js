@@ -40,25 +40,38 @@ function App() {
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/FreaquencyCalculatorPage" component={FreaquencyCalculatorPage} />
 
-          <Route path="/SimilarityCalculatorPage"  >
-            <SimilarityCalculatorPage />
-          </Route>
-          <Route path="/IndexerPage"  >
-            <IndexerPage />
-          </Route>
-          <Route path="/SemanticAnalysPage"  >
-            <SemanticAnalysPage />
-          </Route>
-          <Route path="/" component={HomePage} />
+
+        <Switch>
+
+        </Switch>
+        <Switch>
+          <div style={ styles.router}>
+            <Route path="/FreaquencyCalculatorPage" exact >
+              <FreaquencyCalculatorPage />
+            </Route >
+            <Route path="/SimilarityCalculatorPage" exact  >
+              <SimilarityCalculatorPage />
+            </Route>
+            <Route path="/IndexerPage" exact  >
+              <IndexerPage />
+            </Route>
+            <Route path="/SemanticAnalysPage" exact >
+              <SemanticAnalysPage />
+            </Route>
+            <Route path="/HomePage" exact><HomePage /></Route>
+          </div>
         </Switch>
       </div>
     </Router>
   );
 }
 const styles = {
+  router: {
+    display: 'flex',
+    justifyContent: 'center',
+    overflow:'hidden',
+  },
   ul: {
     listStyleType: 'none',
     margin: 0,
@@ -79,11 +92,11 @@ const styles = {
   active: {
     backgroundColor: '#4CAF50'
   },
-  header:{
+  header: {
     display: 'flex',
     color: 'white',
-    justfySelf:'center',
-    margin:10
-  }
+    justfySelf: 'center',
+    margin: 10
+  },
 }
 export default App;

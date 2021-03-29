@@ -52,7 +52,7 @@ def indexAndSort():
   reqBody = request.get_json()
   baseUrl = reqBody['baseUrl']
   urlSet= reqBody['urlSet']
-  
+  print(reqBody)
   resultArr =  scrape.IndexWebSite(baseUrl,urlSet,3,2) 
 
   print(len(resultArr))

@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import {
   TextField,
   Button,
-  List,
-  ListItem,
   Table,
   TableBody,
   TableCell,
@@ -19,20 +17,20 @@ import api from '../functions/api';
 const FreaquencyCalculatorPage = (props) => {
   const [url, setUrl] = useState('');
   const [rows, setRows] = useState([]);
-  const[spinnerIsVisible,setSpinnerIsVisible] = useState(false);
+  const [spinnerIsVisible, setSpinnerIsVisible] = useState(false);
   const handleUrlChange = (event) => {
     setUrl(event.target.value);
   };
 
   const handleCalculateFrequency = () => {
     setSpinnerIsVisible(true);
-    api.calculateFrequeny(url).then(data => { 
+    api.calculateFrequeny(url).then(data => {
       setSpinnerIsVisible(false);
-      console.log(data);     
-      if(data.message ==='OK'){
+      console.log(data);
+      if (data.message === 'OK') {
 
         setRows(data.wordArray);
-      }else{
+      } else {
         setRows([]);
         alert("yanlis bir url girdiniz ya da bir sorunla karsilasildi")
       }
@@ -40,57 +38,71 @@ const FreaquencyCalculatorPage = (props) => {
   }
 
   return (
-    <>
-      <List>
-        <ListItem style={styles.wrapper}>
-          <TextField
-            style={{ width: '50%' }}
-            id="standard-name"
-            label="Bir url giriniz"
-            value={url}
-            onChange={handleUrlChange}
-          />
-          <Button
-            variant="contained"
-            onClick={handleCalculateFrequency}
-            color="primary"
-          >
-            Frekans Hesapla
+    <Paper
+      style={stylesIn.mainContainer} >
+      <div style={{ ...styles.wrapper, marginBottom: 10 }}>
+        <TextField
+          style={{ width: '50%' }}
+          id="standard-name"
+          label="Bir url giriniz"
+          value={url}
+          onChange={handleUrlChange}
+        />
+        <Button
+          variant="contained"
+          onClick={handleCalculateFrequency}
+          color="primary"
+        >
+          Frekans Hesapla
           </Button>
-        </ListItem>
-        <ListItem>
+      </div>
+      {spinnerIsVisible && <CircularProgress style={{ display: 'flex', justifySelf: 'center', alignSelf: 'center' }} />}
+      <div style={stylesIn.table}>
 
-          <TableContainer TableContainercomponent={Paper} style={styles.wrapper}>
-            <Table aria-label="simple table">
+        <TableContainer TableContainercomponent={Paper}>
+          <Table aria-label="simple table">
 
-              <TableHead>
-                <TableRow>
-                  <TableCell>Kelime</TableCell>
-                  <TableCell align="right">Tekrarlama Sayisi</TableCell>
+            <TableHead>
+              <TableRow>
+                <TableCell>Kelime</TableCell>
+                <TableCell align="right">Tekrarlama Sayisi</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow key={row[0]}>
+                  <TableCell component="th" scope="row">
+                    {row[0]}
+                  </TableCell>
+                  <TableCell align="right">{row[1]}</TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                { spinnerIsVisible && <CircularProgress style={{display:'flex',justifySelf:'center', alignSelf:'center'}}/>}
-                {rows.map((row) => (
-                  <TableRow key={row[0]}>
-                    <TableCell component="th" scope="row">
-                      {row[0]}
-                    </TableCell>
-                    <TableCell align="right">{row[1]}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </ListItem>
-      </List>
-    </>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+    </Paper>
   );
 
 }
-const stylesIn ={
-  table:{
-    height:window.innerHeight*0.7
+const stylesIn = {
+  mainContainer:{
+    display: 'flex',
+    flexDirection: 'column',
+    width: '70%',
+    position: 'relative',
+    height: (window.innerHeight - 120),
+    marginTop: 10,
+    padding: 15,
+    overflow: 'hidden',
+    justifyContent: 'center'
+  },
+  table: {
+    display: 'flex',
+    height: '100%',
+    overflow: 'auto',
+    width: '100%',
+    justifyContent: 'center'
   }
 
 };
