@@ -8,6 +8,7 @@ import time
 import concurrent.futures
 from threading import Thread
 from nltk.corpus import wordnet as wn
+from nltk.corpus import stopwords 
 
 # gloabal variables
 # urlAmount = 23
@@ -50,7 +51,9 @@ def GetWordsFromUrl(url):
 
 def CalculateFrequency(url):
     wordList = GetWordsFromUrl(url)
-    return CreateDictionary(wordList, False,ratio=1)
+    result = CreateDictionary(wordList, False,ratio=1)
+    # print(result)
+    return result
 
 
 # ister 2 icin kullanilan fonksiyon
@@ -68,7 +71,13 @@ def FindKeywords(url, keywordAmount):
     ogTitle = my_soup.find('meta', property='og:title')
     ogDescription = my_soup.find('meta', property='og:description')
     nameDescription = my_soup.find('meta', attrs={'name': 'description'})
-   #  print(ogTitle['content'].lower().split())
+    # find all p tag text without getting its subsequent tag like script, a tags.
+    whitelist = ['p']
+    pTag_text = [t for t in my_soup.find_all(text=True) if t.parent.name in whitelist]
+    pTag_list = []
+    for item in pTag_text:
+        pTag_list += item.split()
+
     try:
         titleWords = title.text.lower().split() if title!=None else []
         titleWords += ogTitle['content'].lower().split() if ogTitle != None else []
@@ -79,7 +88,7 @@ def FindKeywords(url, keywordAmount):
     except print(0):
         pass
 
-    tagNames = ['h1', 'h2', 'h3']
+    tagNames = ['h1', 'h2', 'h3','h4','h5','h6']
     for tag in tagNames:
         result = my_soup.find_all(tag)
         if result != None:
@@ -89,23 +98,29 @@ def FindKeywords(url, keywordAmount):
     # print(titleWords)
     # print(metaTags)
     # print(hTags)
+
+    # counting all word frequency for per tag with their ratio values respectively
     resultDic = {}
     resultDic = countWords(titleWords, {}, ratio=11)
     resultDic = countWords(metaTags, resultDic, 7)
 
     for i, tName in enumerate(tagNames):
         resultDic = countWords(hTags[tName], resultDic, 6-i)
+
+    resultDic = countWords(pTag_list, resultDic, 1)  
+    print(Counter(resultDic).most_common(keywordAmount)) 
     return Counter(resultDic).most_common(keywordAmount)
 
 
 # Function removes any unwanted symbols
 def clean_wordlist(wordlist):
     clean_list = []
-    stopwords = ['what','you','için','bir', 'ile','iki', 'this', 'be','by','can','could', 'that','should', 'is', 'are', 'for', 'was', 'were', 'icin','bu','su','o','it','he','she','it','they' 'but', 'with', 'as', 'get', 'on', 'of', 'to', 'in', 'da', 'ki', 've', 'ama', 'the', 'a', 'and', 'an']
+    stop_words = (stopwords.words('english')) #ntlk stopwords library
+    stop_words += (stopwords.words('turkish'))
     # filters word according to strig length
-    wordlist  = [word for word in wordlist if word.lower() not in stopwords and len(word) > 2]
+    wordlist  = [word for word in wordlist if word.lower() not in stop_words and len(word) > 2]
     for word in wordlist:
-        symbols = '0123456789!@$%^&*()_+={[}]|\;:"<>?/., x\\'
+        symbols = '-0123456789!@$%^&*()_+={[}]|\;:"<>?/., x\\'
         for i in range(0, len(symbols)):
             word = word.replace(symbols[i], '')
         if len(word) > 0:
@@ -114,7 +129,7 @@ def clean_wordlist(wordlist):
 
 
 def CreateDictionary(clean_list, isKeyword, word_count={}, ratio=0):
-       
+    word_count = {}
     for word in clean_list:
         if word in word_count:
             word_count[word] += ratio
@@ -234,7 +249,7 @@ def IndexWebSite(url, urlSet,depth, urlAmount,flag=False):
       t =Thread(target=IndexSiteWithThread, args=(urlSet[i],depth,urlAmount,keywords))
       t.start()
       threads.append(t)
-                                    
+
     for  thread in threads:
         thread.join()
 
@@ -246,7 +261,7 @@ def IndexSiteWithThread(url, depht, urlAmount, keywords):
 
    exporter = JsonExporter(indent=10, sort_keys=True)
    resultDic={}
-   resultDic['urlName'] = url;
+   resultDic['urlName'] = url
    keywords2= FindKeywords(url,10)
    if(len(keywords2)==0) :
       return 
@@ -293,3 +308,7 @@ def createKeywordFrequancyTree(root, parent, stoperIndex, deep, keywords, iterat
 # finish = time.perf_counter()
 # print(f'Finished in {round(finish-start, 2)} second(s)')
 #CalculateSimilarity2("https://www.python.org/about/gettingstarted/","https://www.programiz.com/python-programming")
+# FindKeywords("https://www.python.org/about/gettingstarted/",5)
+
+result = CalculateFrequency("https://tr.wikipedia.org/wiki/Be%C5%9Fikta%C5%9F-Fenerbah%C3%A7e_derbisi")
+# print(result)
