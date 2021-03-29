@@ -87,7 +87,7 @@ def FindKeywords(url,keywordAmount):
 # Function removes any unwanted symbols
 def clean_wordlist(wordlist):
     clean_list = []
-    stopwords = ['what','you','için','bir', 'iki', 'this', 'be','by','can','could', 'that','should', 'is', 'are', 'for', 'was', 'were', 'icin','bu','su','o','it','he','she','it','they' 'but', 'with', 'as', 'get', 'on', 'of', 'to', 'in', 'da', 'ki', 've', 'ama', 'the', 'a', 'and', 'an']
+    stopwords = ['what','you','için','bir', 'iki', 'this','can','could', 'that','should', 'are', 'for', 'was', 'were', 'icin','she','they' 'but', 'with', 'get','of', 'ama', 'the', 'and']
     # filters word according to strig length
     wordlist  = [word for word in wordlist if word.lower() not in stopwords and len(word) > 2]
     for word in wordlist:
@@ -151,14 +151,14 @@ def FindSimilarity(keywords1, keywords2):
         print()
         print(f'word1: {keyWord[0]}')
         synonymWords = FindSynonymsWordsGivenParameterWord(keyWord[0])
-        print(synonymWords)
+        # print(synonymWords)
         for word in keywords2:
             sum += word[1][1]
             if keyWord[0] == word[0]:
                 resultDic['wordCounts'][word[0]] = word[1][1]
                 score *= word[1][1]
             else:
-                print(f'word2: {word[0]}')
+                # print(f'word2: {word[0]}')
                 if len(synonymWords) > 0:
                     for synWord in synonymWords:
                         if synWord == word[0]:
@@ -220,7 +220,7 @@ def IndexWebSite(url, urlSet,depth, urlAmount):
       t =Thread(target=IndexSiteWithThread, args=(urlSet[i],depth,urlAmount,keywords))
       t.start()
       threads.append(t)
-                                    
+
     for  thread in threads:
         thread.join()
     
