@@ -38,7 +38,7 @@ const IndexerPage = props => {
     const classes = useStyles();
     const [url1, setUrl1] = useState('');
     const [url2, setUrl2] = useState('');
-    const [result, setResult] = useState({});
+    const [resultArr, setResultArr] = useState([]);
     const [spinnerIsVisible, setSpinnerIsVisible] = useState(false);
     const [urlSet, setUrlSet] = useState([]);
 
@@ -71,17 +71,18 @@ const IndexerPage = props => {
 
     const handleRequest = () => {
 
-        setSpinnerIsVisible(true);
+
         var jsonObject = {
             baseUrl: url1,
             urlSet: urlSet
         }
         if (url1.includes('http') && urlSet.length > 0) {
+            setSpinnerIsVisible(true);
             api.indexWebSite(jsonObject).then((data) => {
-                setUrl1('')
-                setUrlSet([])
+                if (data.message == "success") {
+                    setResultArr(data.result);
+                }
                 setSpinnerIsVisible(false);
-                console.log(data)
             })
         }
         else if (urlSet.length === 0) {
@@ -122,6 +123,7 @@ const IndexerPage = props => {
                                         edge="end"
                                         aria-label="delete"
                                         onClick={handleAddList}
+                                        color='primary'
                                     >
                                         <AddIcon />
                                     </IconButton>
@@ -200,19 +202,31 @@ const IndexerPage = props => {
 
                         <TableHead>
                             <TableRow>
-                                <TableCell>Sıralama</TableCell>
-                                <TableCell >URL</TableCell>
+                                <TableCell align='center'>Sıralama</TableCell>
+                                <TableCell align='center' >URL</TableCell>
+                                <TableCell align='center'>Skor</TableCell>
+                                <TableCell align="center">Agac</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {/* {rows.map((row) => (
-                                <TableRow key={row[0]}>
-                                    <TableCell component="th" scope="row">
-                                        {row[0]}
+                            {resultArr.map((url, i) => (
+                                <TableRow key={i}>
+                                    <TableCell align="center">
+                                        {i + 1}
                                     </TableCell>
-                                    <TableCell align="right">{row[1]}</TableCell>
+                                    <TableCell align="center" ><a href={url.urlName}>{url.urlName}</a></TableCell>
+                                    <TableCell align="center">{url.score}</TableCell>
+                                    <TableCell align="center" >{
+                                        <Button
+                                            size='small'
+                                            color='primary'
+                                            onClick={()=>{}}
+                                        >
+                                            Agac yapisi
+                                        </Button>}
+                                    </TableCell>
                                 </TableRow>
-                            ))} */}
+                            ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -245,6 +259,6 @@ const styles = {
         overflow: 'auto',
         width: '100%',
         justifyContent: 'center'
-      }
+    }
 }
 export default IndexerPage;

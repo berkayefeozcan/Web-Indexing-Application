@@ -53,14 +53,16 @@ def CalculateSim():
 
 @app.route('/indexAndSort', methods=['POST'])
 def indexAndSort():
-  reqBody = request.get_json()
-  baseUrl = reqBody['baseUrl']
-  urlSet= reqBody['urlSet']
-  print(reqBody)
-  resultArr =  scrape.IndexWebSite(baseUrl,urlSet,3,2) 
+  try:
+    reqBody = request.get_json()
+    baseUrl = reqBody['baseUrl']
+    urlSet= reqBody['urlSet']
 
-  print(len(resultArr))
-  return jsonify({"result":resultArr})
+    resultArr =  scrape.IndexWebSite(baseUrl,urlSet,3,2) 
+    res = make_response(jsonify({"message":"success","result":resultArr}), 200)
+  except:
+    res = make_response(jsonify({"message":"error"}), 404)
+  return res
 
 @app.route('/semanticAnalyes', methods=['GET'])
 def semanticAnalyes():
@@ -70,7 +72,8 @@ def semanticAnalyes():
   resultArr =  scrape.IndexWebSite(baseUrl,urlSet,3,2) 
 
   print(len(resultArr))
-  return jsonify({"result":resultArr})
+
+  return make_response(jsonify({"result":resultArr}), 200)
 
 if __name__ == "__main__":
     app.run(debug=True)
