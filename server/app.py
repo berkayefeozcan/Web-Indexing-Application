@@ -13,9 +13,13 @@ def index():
 
 @app.route('/calculateFrequeny', methods=['GET'])
 def CalculateFreq():
-    givenUrl = request.args.get('givenUrl') 
+  
     try:
+      givenUrl = []
+      givenUrl = request.args.get('givenUrl')
+      print(givenUrl) 
       result = scrape.CalculateFrequency(givenUrl)
+      print(result)
       res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
     except :
       res = make_response(jsonify({"message": "eroor"}), 404)
