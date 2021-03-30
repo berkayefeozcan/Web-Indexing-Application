@@ -23,18 +23,24 @@ const FreaquencyCalculatorPage = (props) => {
   };
 
   const handleCalculateFrequency = () => {
-    setSpinnerIsVisible(true);
-    api.calculateFrequeny(url).then(data => {
-      setSpinnerIsVisible(false);
-      console.log(data);
-      if (data.message === 'OK') {
-
-        setRows(data.wordArray);
-      } else {
-        setRows([]);
-        alert("yanlis bir url girdiniz ya da bir sorunla karsilasildi")
-      }
-    })
+    if(url.includes('http')){
+      setSpinnerIsVisible(true);
+      api.calculateFrequeny(url).then(data => {
+        setSpinnerIsVisible(false);
+        console.log(data);
+        if (data.message === 'OK') {
+  
+          setRows(data.wordArray);
+        } else {
+          setRows([]);
+          alert("yanlis bir url girdiniz ya da bir sorunla karsilasildi")
+        }
+      })
+    }
+    else{
+      alert("Lutfen http ile baslan bir url giriniz")
+    }
+   
   }
 
   return (
