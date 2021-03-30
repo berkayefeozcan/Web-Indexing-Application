@@ -9,6 +9,7 @@ import FreaquencyCalculatorPage from './screens/FreaquencyCalculatorPage';
 import SemanticAnalysPage from './screens/SemanticAnalysPage';
 import IndexerPage from './screens/IndexerPage';
 import SimilarityCalculatorPage from './screens/SimilarityCalculatorPage';
+import DevelopersPage from './screens/DevelopersPage';
 import HomePage from './screens/HomePage';
 
 function App() {
@@ -35,6 +36,9 @@ function App() {
             <li style={styles.li}>
               <NavLink style={styles.link} activeStyle={styles.active} to="/SemanticAnalysPage" >Semantik Analiz</NavLink>
             </li>
+            <li style={styles.li}>
+              <NavLink style={styles.link} activeStyle={styles.active} to="/DevelopersPage" >Geliştiriciler</NavLink>
+            </li>
           </ul>
         </nav>
 
@@ -59,6 +63,9 @@ function App() {
             <Route path="/SemanticAnalysPage" exact >
               <SemanticAnalysPage />
             </Route>
+            <Route path="/DevelopersPage" exact >
+              <DevelopersPage />
+            </Route>
             <Route path="/HomePage" exact><HomePage /></Route>
           </div>
         </Switch>
@@ -71,6 +78,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     overflow:'hidden',
+    alignItems:'center'
   },
   ul: {
     listStyleType: 'none',
