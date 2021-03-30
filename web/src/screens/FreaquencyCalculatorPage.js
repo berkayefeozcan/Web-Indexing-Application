@@ -65,7 +65,7 @@ const FreaquencyCalculatorPage = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell align='center'>Kelime</TableCell>
-                <TableCell >Tekrarlama Sayisi</TableCell>
+                <TableCell align='center'>Tekrarlama Sayisi</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -74,7 +74,7 @@ const FreaquencyCalculatorPage = (props) => {
                   <TableCell align='center'>
                     {row[0]}
                   </TableCell>
-                  <TableCell >{row[1]}</TableCell>
+                  <TableCell align='center'>{row[1]}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
