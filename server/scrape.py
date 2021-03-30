@@ -76,7 +76,7 @@ def FindKeywords(url, keywordAmount):
     pTag_text = [t for t in my_soup.find_all(text=True) if t.parent.name in whitelist]
     pTag_list = []
     for item in pTag_text:
-        pTag_list += item.split()
+        pTag_list += item.lower().split()
 
     try:
         titleWords = title.text.lower().split() if title!=None else []
@@ -85,7 +85,7 @@ def FindKeywords(url, keywordAmount):
         ).split() if ogDescription != None else []
         metaTags += nameDescription['content'].lower(
         ).split() if nameDescription != None else []
-    except print(0):
+    except Exception:
         pass
 
     tagNames = ['h1', 'h2', 'h3','h4','h5','h6']
@@ -108,7 +108,7 @@ def FindKeywords(url, keywordAmount):
         resultDic = countWords(hTags[tName], resultDic, 6-i)
 
     resultDic = countWords(pTag_list, resultDic, 1)  
-    print(Counter(resultDic).most_common(keywordAmount)) 
+
     return Counter(resultDic).most_common(keywordAmount)
 
 
@@ -163,22 +163,20 @@ def FindSimilarity(keywords1, keywords2):
     resultDic['wordCounts']={}
     resultDic['synonymWords']={}
     resultDic['score'] = 1
-
-    score = 1
+    
+    score = 0
     sum = 0
     for keyWord in keywords1:
-        #print()
-        #print(f'word1: {keyWord[0]}')
         try:
             if isSemantic : synonymWords = FindSynonymsWordsGivenParameterWord(keyWord[0])
         except Exception:
             continue
-        #print(synonymWords)
+
         for word in keywords2:
             sum += word[1][1]
             if keyWord[0] == word[0]:
                 resultDic['wordCounts'][word[0]] = word[1][1]
-                score *= word[1][1]
+                score += word[1][1]
             try:
                 if isSemantic:
                    # print(f'word2: {word[0]}')
@@ -186,7 +184,7 @@ def FindSimilarity(keywords1, keywords2):
                         for synWord in synonymWords:
                             if synWord == word[0]:
                                 resultDic['synonymWords'][keyWord[0]] = word[0]
-                                score *= word[1][1]
+                                score += word[1][1]
             except Exception:
                 continue
             
@@ -310,5 +308,11 @@ def createKeywordFrequancyTree(root, parent, stoperIndex, deep, keywords, iterat
 #CalculateSimilarity2("https://www.python.org/about/gettingstarted/","https://www.programiz.com/python-programming")
 # FindKeywords("https://www.python.org/about/gettingstarted/",5)
 
-result = CalculateFrequency("https://tr.wikipedia.org/wiki/Be%C5%9Fikta%C5%9F-Fenerbah%C3%A7e_derbisi")
+# result = CalculateFrequency("https://tr.wikipedia.org/wiki/Be%C5%9Fikta%C5%9F-Fenerbah%C3%A7e_derbisi")
 # print(result)
+
+# result = FindSimilarity(FindKeywords("https://www.programiz.com/python-programming", 5), FindKeywords("https://www.python.org/about/gettingstarted/", 15))
+# print(result)
+urlSet = ["https://www.python.org/about/gettingstarted/","https://docs.python.org/3/library/exceptions.html", "https://realpython.com/python-exceptions/"]
+result = IndexWebSite("https://www.programiz.com/python-programming",urlSet, 3, 2)
+print(result)
