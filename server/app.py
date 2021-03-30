@@ -64,16 +64,18 @@ def indexAndSort():
     res = make_response(jsonify({"message":"error"}), 404)
   return res
 
-@app.route('/semanticAnalyes', methods=['GET'])
+@app.route('/semanticAnalyes', methods=['POST'])
 def semanticAnalyes():
-  baseUrl = "https://en.wikipedia.org/wiki/Virus"
-  urlSet=["https://en.wikipedia.org/wiki/Main_Page","https://en.wikipedia.org/wiki/Oncovirus","https://en.wikipedia.org/wiki/Polyomaviridae"]
-  scrape.setIsSemantic(True)
-  resultArr =  scrape.IndexWebSite(baseUrl,urlSet,3,2) 
-
-  print(len(resultArr))
-
-  return make_response(jsonify({"result":resultArr}), 200)
+  try :
+    reqBody = request.get_json()
+    baseUrl = reqBody['baseUrl']
+    urlSet= reqBody['urlSet']
+    scrape.setIsSemantic(True)
+    resultArr =  scrape.IndexWebSite(baseUrl,urlSet,3,2) 
+    res = make_response(jsonify({"message":"success","result":resultArr}), 200)
+  except:
+    res = make_response(jsonify({"message":"error"}), 404)
+  return res
 
 if __name__ == "__main__":
     app.run(debug=True)

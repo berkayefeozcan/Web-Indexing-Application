@@ -13,7 +13,7 @@ from nltk.corpus import stopwords
 # gloabal variables
 # urlAmount = 23
 # depth = 3
-isSemantic = True
+isSemantic = False
 resultArr = []
 def setIsSemantic(value):
     isSemantic = value
@@ -313,6 +313,6 @@ def createKeywordFrequancyTree(root, parent, stoperIndex, deep, keywords, iterat
 
 # result = FindSimilarity(FindKeywords("https://www.programiz.com/python-programming", 5), FindKeywords("https://www.python.org/about/gettingstarted/", 15))
 # print(result)
-urlSet = ["https://www.python.org/about/gettingstarted/","https://docs.python.org/3/library/exceptions.html", "https://realpython.com/python-exceptions/"]
-result = IndexWebSite("https://www.programiz.com/python-programming",urlSet, 3, 2)
-print(result)
+# urlSet = ["https://www.python.org/about/gettingstarted/","https://docs.python.org/3/library/exceptions.html", "https://realpython.com/python-exceptions/"]
+# result = IndexWebSite("https://www.programiz.com/python-programming",urlSet, 3, 2)
+# print(result)
