@@ -1,9 +1,10 @@
 from flask import Flask
 from flask import request, jsonify, make_response
 from flask_cors import CORS
-import scrape 
+from scrape import Crawler 
 import json 
 
+crawler = Crawler() 
 app = Flask(__name__)
 CORS(app)
 
@@ -18,10 +19,11 @@ def CalculateFreq():
       givenUrl = []
       givenUrl = request.args.get('givenUrl')
       print(givenUrl) 
-      result = scrape.CalculateFrequency(givenUrl)
+      result = crawler.CalculateFrequency(givenUrl)
       print(result)
       res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
-    except :
+    except Exception as e :
+      print(e)
       res = make_response(jsonify({"message": "eroor"}), 404)
     return res
 
@@ -30,7 +32,7 @@ def CalculateFreq():
 def FindKeyw():
     givenUrl = request.args.get('givenUrl') 
     try:
-      result = scrape.FindKeywords(givenUrl)
+      result = crawler.FindKeywords(givenUrl)
       res = make_response(jsonify({"message": "OK" , "wordArray":result}), 200)
     except :
       res = make_response(jsonify({"message": "eroor"}), 404)   
@@ -42,9 +44,9 @@ def CalculateSim():
     givenUrlOne = request.args.get('givenUrlOne')
     givenUrlTwo = request.args.get('givenUrlTwo') 
     try:
-        url1Keywords= scrape.FindKeywords(givenUrlOne,5)
-        url2Keywords = scrape.FindKeywords(givenUrlTwo,5)
-        similarityScore = scrape.FindSimilarity(url1Keywords, url2Keywords)
+        url1Keywords= crawler.FindKeywords(givenUrlOne,5)
+        url2Keywords = crawler.FindKeywords(givenUrlTwo,5)
+        similarityScore = crawler.FindSimilarity(url1Keywords, url2Keywords)
         result = {"url1Keywords": url1Keywords, "url2Keywords": url2Keywords, "similarityScore": similarityScore}
         res = make_response(jsonify({"message": "OK" , "result":result}), 200)
     except:
@@ -57,8 +59,8 @@ def indexAndSort():
     reqBody = request.get_json()
     baseUrl = reqBody['baseUrl']
     urlSet= reqBody['urlSet']
-
-    resultArr =  scrape.IndexWebSite(baseUrl,urlSet,3,2) 
+    crawler.setIsSemantic(False)
+    resultArr =  crawler.IndexWebSite(baseUrl,urlSet,3,2) 
     res = make_response(jsonify({"message":"success","result":resultArr}), 200)
   except:
     res = make_response(jsonify({"message":"error"}), 404)
@@ -70,8 +72,8 @@ def semanticAnalyes():
     reqBody = request.get_json()
     baseUrl = reqBody['baseUrl']
     urlSet= reqBody['urlSet']
-    scrape.setIsSemantic(True)
-    resultArr =  scrape.IndexWebSite(baseUrl,urlSet,3,2) 
+    crawler.setIsSemantic(True)
+    resultArr =  crawler.IndexWebSite(baseUrl,urlSet,3,2) 
     res = make_response(jsonify({"message":"success","result":resultArr}), 200)
   except:
     res = make_response(jsonify({"message":"error"}), 404)
