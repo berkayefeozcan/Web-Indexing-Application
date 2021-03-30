@@ -216,7 +216,7 @@ const IndexerAndAnalyser = props => {
             <div style={styles.table}>
 
                 <TableContainer TableContainercomponent={Paper}>
-                    <Table aria-label="simple table">
+                    <Table stickyHeader  aria-label="simple table">
 
                         <TableHead>
                             <TableRow>

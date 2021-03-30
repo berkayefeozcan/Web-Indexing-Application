@@ -59,22 +59,22 @@ const FreaquencyCalculatorPage = (props) => {
       {spinnerIsVisible && <CircularProgress style={{ display: 'flex', justifySelf: 'center', alignSelf: 'center' }} />}
       <div style={stylesIn.table}>
 
-        <TableContainer TableContainercomponent={Paper}>
-          <Table aria-label="simple table">
+        <TableContainer  TableContainercomponent={Paper}>
+          <Table stickyHeader aria-label="simple table">
 
             <TableHead>
               <TableRow>
-                <TableCell>Kelime</TableCell>
-                <TableCell align="right">Tekrarlama Sayisi</TableCell>
+                <TableCell align='center'>Kelime</TableCell>
+                <TableCell >Tekrarlama Sayisi</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.map((row) => (
                 <TableRow key={row[0]}>
-                  <TableCell component="th" scope="row">
+                  <TableCell align='center'>
                     {row[0]}
                   </TableCell>
-                  <TableCell align="right">{row[1]}</TableCell>
+                  <TableCell >{row[1]}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
