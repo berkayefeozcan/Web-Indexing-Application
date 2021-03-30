@@ -37,7 +37,13 @@ const useStyles = makeStyles((theme) => ({
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
+const testUrlSet=[
+    "https://undergrad.cs.umd.edu/what-computer-science#:~:text=Computer%20Science%20is%20the%20study,design%2C%20development%2C%20and%20application.",
+    "https://en.wikipedia.org/wiki/Computer_science",
+    "https://www.britannica.com/science/computer-science",
+    "https://cs.sabanciuniv.edu/"
 
+]
 const IndexerAndAnalyser = props => {
     const classes = useStyles();
     const [open, setOpen] = useState(false)
@@ -46,7 +52,7 @@ const IndexerAndAnalyser = props => {
     const [tree, setTree] = useState({})
     const [resultArr, setResultArr] = useState([]);
     const [spinnerIsVisible, setSpinnerIsVisible] = useState(false);
-    const [urlSet, setUrlSet] = useState([]);
+    const [urlSet, setUrlSet] = useState(testUrlSet);
 
     const handleUrl1Change = (event) => {
         setUrl1(event.target.value);
