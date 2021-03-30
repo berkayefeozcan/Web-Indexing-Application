@@ -44,15 +44,20 @@ const SimilarityCalculatorPage = (props) => {
   };
 
   const handleCalculateSimilarity = () => {
-    setSpinnerIsVisible(true)
+   
     setResult(initialData)
-    api.calculateSimilarity(url1, url2).then((data) => {
-      if (data.message === 'OK') {
-        console.log(data)
-        setResult(data.result)
-        setSpinnerIsVisible(false)
-      }
-    });
+    if(url1.includes('http') && url2.includes('http') ){
+      setSpinnerIsVisible(true)
+      api.calculateSimilarity(url1, url2).then((data) => {
+        if (data.message === 'OK') {
+          console.log(data)
+          setResult(data.result)
+          setSpinnerIsVisible(false)
+        }
+      });
+    }
+    else alert('Lutfen linkleri duzgun giriniz')
+    
   };
   const KeywordList = props => {
     return (
